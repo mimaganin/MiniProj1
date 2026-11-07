@@ -44,6 +44,8 @@
     }
     .site-header .container { display: flex; flex-direction: column; gap: 8px; padding-top: 12px; padding-bottom: 10px; }
     .brand { margin: 0; font-size: 1.25rem; }
+    .brand a { display: inline-block; color: inherit; text-decoration: none; border-radius: 4px; }
+    .brand a:hover { color: var(--accent); }
     .brand small { display: block; font-size: .875rem; font-weight: 400; color: var(--text-muted); }
 
     .main-nav ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 4px; }
@@ -211,7 +213,10 @@
     <!-- HEADER: fixed, the same on every view -->
     <header class="site-header">
       <div class="container">
-        <h1 class="brand">{{ cv.name }} <small>{{ cv.role }}</small></h1>
+        <!-- The name is a link back to the default view ("Quem Sou Eu?") -->
+        <h1 class="brand">
+          <a :href="'#/' + defaultView" @click="onBrandClick">{{ cv.name }} <small>{{ cv.role }}</small></a>
+        </h1>
 
         <!-- Menu generated from the "views" list (v-for) -->
         <nav class="main-nav" aria-label="Secções do currículo">
@@ -524,6 +529,14 @@
           nextTick(() => viewTitle.value.focus({ preventScroll: true }));
         }
 
+        // Click on the name: the link already goes to #/quem-sou-eu. If that is already the
+        // current view the hash does not change (no hashchange), so scroll back to the top instead
+        function onBrandClick() {
+          if (currentView.value !== DEFAULT_VIEW) return; // hashchange takes care of it
+          window.scrollTo(0, 0);
+          viewTitle.value.focus({ preventScroll: true });
+        }
+
         // "Skip to content" link
         function skipToContent() {
           document.getElementById('content').focus();
@@ -578,7 +591,7 @@
         });
 
         return {
-          cv, views, currentView, currentTitle, viewTitle, skipToContent,
+          cv, views, defaultView: DEFAULT_VIEW, currentView, currentTitle, viewTitle, onBrandClick, skipToContent,
           modalItem, closeButton, modalBox, openModal, closeModal, trapFocus
         };
       }

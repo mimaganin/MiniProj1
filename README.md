@@ -60,7 +60,7 @@ Todo o texto do currículo está no objeto `cv`, no JavaScript. O HTML só defin
 
 ### 5. Hash routing (sem biblioteca)
 
-Os links do menu apontam para fragmentos (`#/hobbies`). Mudar só o fragmento da URL **não recarrega a página**, mas cria uma entrada no histórico e dispara o evento `hashchange` (MDN, s.d.-a). A app ouve esse evento e atualiza `currentView`. Assim:
+Os links do menu apontam para fragmentos (`#/hobbies`), e o nome no cabeçalho é um link para a vista inicial (`#/quem-sou-eu`); se essa vista já estiver aberta, o clique faz voltar ao topo. Mudar só o fragmento da URL **não recarrega a página**, mas cria uma entrada no histórico e dispara o evento `hashchange` (MDN, s.d.-a). A app ouve esse evento e atualiza `currentView`. Assim:
 
 - os botões **Voltar/Avançar** do browser funcionam;
 - cada vista tem um **link partilhável**;

@@ -129,7 +129,7 @@
     <div>
       <p class="label">Mapa de navegação (um só documento: index.html)</p>
       <div class="map">
-        <div class="fixed">CABEÇALHO FIXO: nome, cargo e menu com 3 links internos <span class="marker">1</span></div>
+        <div class="fixed">CABEÇALHO FIXO: nome (link para Quem Sou Eu?), cargo e menu com 3 links internos <span class="marker">1</span></div>
         <div class="arrow">o link clicado muda só o fragmento da URL (#/…) → evento <b>hashchange</b> → o Vue troca a vista</div>
         <div class="views">
           <div class="view"><b>Quem Sou Eu?</b><code>#/quem-sou-eu</code><code>(vista por omissão)</code></div>
@@ -173,7 +173,7 @@
       </table>
       <div class="notes">
         <ol style="margin-top:4mm">
-          <li><span class="marker">1</span><span><b>Cabeçalho fixo</b> (sticky): não é recriado ao mudar de vista. No desktop, nome à esquerda e menu à direita; no telemóvel, o menu passa para baixo do nome (sem hambúrguer, são só 3 links).</span></li>
+          <li><span class="marker">1</span><span><b>Cabeçalho fixo</b> (sticky): não é recriado ao mudar de vista. Clicar no nome leva sempre a "Quem Sou Eu?" (<code>#/quem-sou-eu</code>). No desktop, nome à esquerda e menu à direita; no telemóvel, o menu passa para baixo do nome (sem hambúrguer, são só 3 links).</span></li>
           <li><span class="marker">2</span><span><b>Modal</b>: uma só estrutura HTML; muda apenas o conteúdo. Desktop: caixa centrada. Telemóvel: "folha" que sobe do fundo do ecrã.</span></li>
           <li><span class="marker">3</span><span><b>Rodapé fixo</b>: igual em todas as vistas; LinkedIn e GitHub abrem num novo separador, o e-mail abre o cliente de correio.</span></li>
         </ol>
@@ -257,7 +257,7 @@
     <div class="notes">
       <h2>Anotações</h2>
       <ol>
-        <li><span class="marker">1</span><span>Menu: cada link aponta para <code>#/id-da-vista</code>. O link ativo fica escuro (<code>aria-current="page"</code>). No telemóvel passa para baixo do nome.</span></li>
+        <li><span class="marker">1</span><span>Menu: cada link aponta para <code>#/id-da-vista</code>. O link ativo fica escuro (<code>aria-current="page"</code>). No telemóvel passa para baixo do nome. O próprio nome também é um link para esta vista.</span></li>
         <li><span class="marker">2</span><span>Título da vista (h2). Ao mudar de vista recebe o foco, para o leitor de ecrã anunciar a mudança.</span></li>
         <li><span class="marker">3</span><span>Bloco de apresentação, com uma barra lateral de destaque.</span></li>
         <li><span class="marker">4</span><span>Formação em cronologia (<code>v-for</code>): período, curso e instituição.</span></li>
