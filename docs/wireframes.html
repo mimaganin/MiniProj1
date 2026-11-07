@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MiniProj1 · Wireframes</title>
+<style>
+  /* Low-fidelity wireframes: greyscale only, no images.
+     Each .sheet is one landscape A4 page in the PDF. */
+  @page { size: A4 landscape; margin: 0; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #9a9a9a; color: #222; font-family: system-ui, "Segoe UI", Roboto, Arial, sans-serif; font-size: 9pt; line-height: 1.35; }
+  .sheet {
+    width: 297mm; height: 210mm; margin: 8mm auto; padding: 9mm 10mm 8mm;
+    background: #fff; display: flex; flex-direction: column; overflow: hidden;
+    page-break-after: always; break-after: page;
+  }
+  @media print { body { background: #fff; } .sheet { margin: 0; } }
+
+  /* Header of each sheet */
+  .sheet-header { display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1.5px solid #222; padding-bottom: 2mm; margin-bottom: 5mm; }
+  .sheet-header h1 { margin: 0; font-size: 15pt; }
+  .sheet-header span { color: #666; font-size: 8.5pt; }
+
+  .stage { display: flex; gap: 7mm; align-items: flex-start; flex: 1; min-height: 0; }
+  .label { font-size: 8pt; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: #555; margin: 0 0 1.5mm; }
+
+  /* Device frames (desktop and mobile) */
+  .frame { border: 1.5px solid #444; background: #fff; position: relative; overflow: hidden; }
+  .desktop { width: 152mm; }
+  .mobile  { width: 54mm; border-radius: 4mm; }
+  .browser-bar { height: 6mm; background: #d9d9d9; border-bottom: 1px solid #999; display: flex; align-items: center; gap: 1.2mm; padding: 0 2mm; font-family: Consolas, monospace; font-size: 6.5pt; color: #444; }
+  .browser-bar i { width: 2mm; height: 2mm; border-radius: 50%; background: #999; display: inline-block; }
+  .browser-bar b { font-weight: 400; background: #fff; border: 1px solid #aaa; border-radius: 1mm; padding: 0 1.5mm; margin-left: 1mm; }
+
+  /* Fixed areas */
+  .wf-header { display: flex; justify-content: space-between; align-items: center; padding: 2.5mm 4mm; border-bottom: 1px solid #888; background: #ededed; }
+  .mobile .wf-header { flex-direction: column; align-items: flex-start; gap: 1.5mm; padding: 2mm 3mm; }
+  .brand { font-weight: 700; font-size: 9pt; }
+  .brand small { display: block; font-weight: 400; font-size: 6.5pt; color: #555; }
+  .nav { display: flex; gap: 1.5mm; }
+  .nav span { border: 1px solid #888; border-radius: 3mm; padding: .4mm 2mm; font-size: 7pt; background: #fff; white-space: nowrap; }
+  .mobile .nav { gap: 1mm; }
+  .mobile .nav span { font-size: 5.8pt; padding: .3mm 1.3mm; }
+  .nav span.active { background: #444; color: #fff; border-color: #444; }
+  .wf-footer { border-top: 1px solid #888; background: #ededed; padding: 2.5mm; text-align: center; font-size: 6.5pt; color: #555; }
+  .social { display: flex; justify-content: center; gap: 2mm; margin-bottom: 1mm; }
+  .social span { width: 5mm; height: 5mm; border: 1px solid #666; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 5.5pt; font-weight: 700; background: #fff; }
+
+  /* Content */
+  .wf-main { padding: 3mm 4mm; background: #f7f7f7; }
+  .mobile .wf-main { padding: 2.5mm 3mm; }
+  .view-title { font-size: 12pt; font-weight: 700; margin: 0 0 2mm; }
+  .mobile .view-title { font-size: 10pt; }
+  .panel { border: 1px solid #aaa; background: #fff; padding: 2mm 3mm; margin-bottom: 2mm; }
+  .panel.intro { border-left: 2.5mm solid #888; }
+  .panel-title { font-weight: 700; font-size: 8pt; margin-bottom: 1mm; }
+  .text-line { height: 1.6mm; background: #d4d4d4; margin: 1mm 0; border-radius: .5mm; }
+  .item { border-left: 1mm solid #bbb; padding: .4mm 0 .4mm 2mm; margin: .8mm 0; font-size: 7pt; }
+  .item .period { font-size: 6pt; color: #666; font-weight: 700; }
+  .item .title { font-weight: 600; }
+  .item .place { color: #666; }
+  .item.compact .period { display: inline-block; min-width: 20mm; }
+  .item.compact .title { display: inline; }
+  .card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5mm; }
+  .mobile .card-grid { grid-template-columns: 1fr; }
+  .card { border: 1px solid #888; background: #fff; padding: 1.5mm 2mm; font-size: 7pt; }
+  .card b { display: block; }
+  .card em { font-style: normal; color: #666; display: block; }
+  .card u { text-decoration: none; font-size: 6pt; font-weight: 700; color: #444; }
+  .tags { display: flex; flex-wrap: wrap; gap: 1mm; }
+  .tags span { border: 1px solid #aaa; border-radius: 2mm; padding: 0 1.5mm; font-size: 6pt; background: #eee; }
+  .hint { font-size: 6.5pt; color: #666; margin-bottom: 1mm; }
+
+  /* Data: where each area comes from (cv object in the JS) */
+  .data { font-family: Consolas, monospace; font-size: 5.8pt; color: #333; background: #fff; border: 1px dashed #777; padding: 0 1mm; display: inline-block; margin-top: .5mm; }
+
+  /* Numbered markers that point to the notes */
+  .marker { display: inline-flex; align-items: center; justify-content: center; width: 4.2mm; height: 4.2mm; border-radius: 50%; background: #222; color: #fff; font-size: 6.5pt; font-weight: 700; flex: none; vertical-align: middle; }
+  .nav span.marker { background: #222; color: #fff; border: none; padding: 0; border-radius: 50%; font-size: 6.5pt; }
+  .absolute { position: absolute; }
+
+  /* Side notes */
+  .notes { flex: 1; font-size: 8.3pt; }
+  .notes ol { list-style: none; margin: 0; padding: 0; }
+  .notes li { display: flex; gap: 2mm; margin-bottom: 2.2mm; }
+  .notes h2 { font-size: 9.5pt; margin: 0 0 2mm; }
+  .notes .note-box { border: 1px solid #aaa; background: #f3f3f3; padding: 2mm 2.5mm; margin-top: 3mm; font-size: 7.8pt; }
+
+  /* Modal (page 5) */
+  .overlay { position: absolute; inset: 6mm 0 0 0; background: rgba(0,0,0,.45); }
+  .wf-modal { position: absolute; background: #fff; border: 1.5px solid #222; padding: 3mm; font-size: 7.5pt; }
+  .wf-modal .close { position: absolute; top: 2mm; right: 2mm; width: 5mm; height: 5mm; border: 1px solid #444; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; }
+  .wf-modal .category { font-size: 6pt; font-weight: 700; color: #555; }
+  .wf-modal .modal-title { font-size: 11pt; font-weight: 700; margin: .5mm 0; }
+
+  /* Page 1 */
+  .cover { display: grid; grid-template-columns: 1.15fr 1fr; gap: 8mm; flex: 1; }
+  .map { border: 1px solid #aaa; padding: 4mm; display: flex; flex-direction: column; gap: 3mm; }
+  .map .fixed { border: 1.5px dashed #444; background: #ededed; padding: 2mm; text-align: center; font-weight: 600; }
+  .map .views { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3mm; }
+  .map .view { border: 1.5px solid #444; padding: 2mm; text-align: center; background: #fff; }
+  .map .view code, .map code { font-family: Consolas, monospace; font-size: 7pt; color: #444; display: block; }
+  .map .arrow { text-align: center; font-size: 8pt; color: #444; }
+  .map .modal-node { border: 1.5px solid #222; background: #f3f3f3; padding: 2mm; text-align: center; }
+  table { border-collapse: collapse; width: 100%; font-size: 7.6pt; }
+  th, td { border: 1px solid #aaa; padding: 1.2mm 1.8mm; text-align: left; vertical-align: top; }
+  th { background: #e5e5e5; }
+  td code { font-family: Consolas, monospace; font-size: 7pt; }
+</style>
+</head>
+<body>
+
+<!-- ============ PAGE 1: cover, navigation map and data ============ -->
+<section class="sheet">
+  <div class="sheet-header">
+    <h1>MiniProj1: wireframes do currículo SPA</h1>
+    <span>Milena Maganin · Programação Web Avançada · MEIW (UAb/UTAD) · novembro de 2026</span>
+  </div>
+  <div class="cover">
+    <div>
+      <p class="label">Mapa de navegação (um só documento: index.html)</p>
+      <div class="map">
+        <div class="fixed">CABEÇALHO FIXO: nome, cargo e menu com 3 links internos <span class="marker">1</span></div>
+        <div class="arrow">o link clicado muda só o fragmento da URL (#/…) → evento <b>hashchange</b> → o Vue troca a vista</div>
+        <div class="views">
+          <div class="view"><b>Quem Sou Eu?</b><code>#/quem-sou-eu</code><code>(vista por omissão)</code></div>
+          <div class="view"><b>O que faço?</b><code>#/o-que-faco</code></div>
+          <div class="view"><b>Hobbies</b><code>#/hobbies</code></div>
+        </div>
+        <div class="views">
+          <div class="arrow">sem modal</div>
+          <div class="arrow">clique num cartão de projeto ↓</div>
+          <div class="arrow">clique num cartão de hobby ↓</div>
+        </div>
+        <div class="modal-node"><b>MODAL ÚNICO E REUTILIZÁVEL</b> <span class="marker">2</span><code>preenchido com os dados do cartão clicado · fecha com ×, Esc ou clique fora · não muda a URL</code></div>
+        <div class="fixed">RODAPÉ FIXO: LinkedIn · GitHub · E-mail (ícones SVG) <span class="marker">3</span></div>
+      </div>
+      <div class="notes">
+        <div class="note-box">
+          <b>Legenda.</b> Caixas cinzentas = blocos de conteúdo · linhas cinzentas = texto corrido ·
+          <span class="data">cv.field</span> = dados do objeto <code>cv</code> no JavaScript que preenchem essa zona ·
+          <span class="marker">n</span> = anotação explicada ao lado de cada folha.
+          Escuro no menu = vista ativa (<code>aria-current="page"</code>).
+        </div>
+      </div>
+    </div>
+    <div>
+      <p class="label">Distribuição dos dados pelas vistas</p>
+      <table>
+        <thead><tr><th>Dados (objeto <code>cv</code>)</th><th>Onde aparecem</th><th>Como são mostrados</th></tr></thead>
+        <tbody>
+          <tr><td><code>cv.name</code>, <code>cv.role</code></td><td>Cabeçalho (todas) e topo de "Quem Sou Eu?"</td><td>Texto</td></tr>
+          <tr><td><code>views[]</code> (3)</td><td>Menu do cabeçalho; título h2 da vista</td><td>Links <code>v-for</code></td></tr>
+          <tr><td><code>cv.about.summary</code></td><td>Quem Sou Eu?</td><td>Bloco de apresentação</td></tr>
+          <tr><td><code>cv.about.education[]</code> (5)</td><td>Quem Sou Eu?</td><td>Cronologia: período, curso, instituição</td></tr>
+          <tr><td><code>cv.about.beforeTech[]</code> (5)</td><td>Quem Sou Eu?</td><td>Lista simples</td></tr>
+          <tr><td><code>cv.experience[]</code> (3)</td><td>O que faço?</td><td>Cronologia: período, cargo, empresa, descrição</td></tr>
+          <tr><td><code>cv.projects[]</code> (4)</td><td>O que faço?</td><td>Cartões (título + resumo) → modal com descrição e tecnologias</td></tr>
+          <tr><td><code>cv.skills[]</code> (10)</td><td>O que faço?</td><td>Etiquetas</td></tr>
+          <tr><td><code>cv.hobbies[]</code> (4)</td><td>Hobbies</td><td>Cartões → modal com descrição e etiquetas</td></tr>
+          <tr><td><code>cv.social[]</code> (3)</td><td>Rodapé (todas)</td><td>Ícones SVG com link</td></tr>
+        </tbody>
+      </table>
+      <div class="notes">
+        <ol style="margin-top:4mm">
+          <li><span class="marker">1</span><span><b>Cabeçalho fixo</b> (sticky): não é recriado ao mudar de vista. No desktop, nome à esquerda e menu à direita; no telemóvel, o menu passa para baixo do nome (sem hambúrguer, são só 3 links).</span></li>
+          <li><span class="marker">2</span><span><b>Modal</b>: uma só estrutura HTML; muda apenas o conteúdo. Desktop: caixa centrada. Telemóvel: "folha" que sobe do fundo do ecrã.</span></li>
+          <li><span class="marker">3</span><span><b>Rodapé fixo</b>: igual em todas as vistas; LinkedIn e GitHub abrem num novo separador, o e-mail abre o cliente de correio.</span></li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PAGE 2: Quem Sou Eu? ============ -->
+<section class="sheet">
+  <div class="sheet-header"><h1>Vista 1: "Quem Sou Eu?"</h1><span>#/quem-sou-eu · vista por omissão (abrir o index.html sem hash leva aqui)</span></div>
+  <div class="stage">
+    <div>
+      <p class="label">Desktop (≥ 760 px)</p>
+      <div class="frame desktop">
+        <div class="browser-bar"><i></i><i></i><i></i><b>index.html#/quem-sou-eu</b></div>
+        <div class="wf-header">
+          <div class="brand">Milena Maganin <small>Analista de Sistemas e Team Lead</small></div>
+          <div class="nav"><span class="active">Quem Sou Eu?</span><span>O que faço?</span><span>Hobbies</span> <span class="marker">1</span></div>
+        </div>
+        <div class="wf-main">
+          <div class="view-title">Quem Sou Eu? <span class="marker">2</span></div>
+          <div class="panel intro">
+            <b>Milena Maganin</b> · Analista de Sistemas e Team Lead <span class="marker">3</span>
+            <div class="text-line" style="width:95%"></div><div class="text-line" style="width:60%"></div>
+            <span class="data">cv.name · cv.role · cv.about.summary</span>
+          </div>
+          <div class="panel">
+            <div class="panel-title">Percurso académico <span class="marker">4</span></div>
+            <div class="item compact"><span class="period">2006–2009</span><span class="title">Licenciatura em Comunicação Social – Jornalismo</span> <span class="place">· Unaerp</span></div>
+            <div class="item compact"><span class="period">2012–2014</span><span class="title">Pós-graduação em Linguagens dos Media</span></div>
+            <div class="item compact"><span class="period">2023–2024</span><span class="title">CS50x – Introduction to Computer Science</span></div>
+            <div class="item compact"><span class="period">2023–2025</span><span class="title">Tecnólogo em Análise e Desenvolvimento de Sistemas</span></div>
+            <div class="item compact"><span class="period">2026 – em curso</span><span class="title">Mestrado em Engenharia Informática e Tecnologia Web</span></div>
+            <span class="data">v-for: cv.about.education[ ] × 5 (period · course · institution)</span>
+          </div>
+          <div class="panel">
+            <div class="panel-title">Antes da tecnologia <span class="marker">5</span></div>
+            <div class="text-line" style="width:40%"></div><div class="text-line" style="width:50%"></div>
+            <span class="data">v-for: cv.about.beforeTech[ ] × 5</span>
+          </div>
+        </div>
+        <div class="wf-footer"><div class="social"><span>in</span><span>GH</span><span>@</span></div>© 2026 Milena Maganin · Miniprojeto 1 <span class="marker">6</span></div>
+      </div>
+    </div>
+    <div>
+      <p class="label">Telemóvel (375 px)</p>
+      <div class="frame mobile">
+        <div class="browser-bar"><b>#/quem-sou-eu</b></div>
+        <div class="wf-header">
+          <div class="brand">Milena Maganin <small>Analista de Sistemas e Team Lead</small></div>
+          <div class="nav"><span class="active">Quem Sou Eu?</span><span>O que faço?</span><span>Hobbies</span></div>
+        </div>
+        <div class="wf-main">
+          <div class="view-title">Quem Sou Eu?</div>
+          <div class="panel intro"><b>Milena Maganin</b><div class="text-line"></div><div class="text-line" style="width:70%"></div></div>
+          <div class="panel"><div class="panel-title">Percurso académico</div>
+            <div class="item"><div class="period">2006–2009</div><div class="text-line"></div></div>
+            <div class="item"><div class="period">2012–2014</div><div class="text-line"></div></div>
+            <div class="item"><div class="period">2023–2024</div><div class="text-line"></div></div>
+            <div class="item"><div class="period">2023–2025</div><div class="text-line"></div></div>
+            <div class="item"><div class="period">2026</div><div class="text-line"></div></div>
+          </div>
+          <div class="panel"><div class="panel-title">Antes da tecnologia</div><div class="text-line"></div><div class="text-line" style="width:60%"></div></div>
+        </div>
+        <div class="wf-footer"><div class="social"><span>in</span><span>GH</span><span>@</span></div>©</div>
+      </div>
+    </div>
+    <div class="notes">
+      <h2>Anotações</h2>
+      <ol>
+        <li><span class="marker">1</span><span>Menu: cada link aponta para <code>#/id-da-vista</code>. O link ativo fica escuro (<code>aria-current="page"</code>). No telemóvel passa para baixo do nome.</span></li>
+        <li><span class="marker">2</span><span>Título da vista (h2). Ao mudar de vista recebe o foco, para o leitor de ecrã anunciar a mudança.</span></li>
+        <li><span class="marker">3</span><span>Bloco de apresentação, com uma barra lateral de destaque.</span></li>
+        <li><span class="marker">4</span><span>Formação em cronologia (<code>v-for</code>): período, curso e instituição.</span></li>
+        <li><span class="marker">5</span><span>Lista do percurso anterior à tecnologia.</span></li>
+        <li><span class="marker">6</span><span>Rodapé fixo, igual nas três vistas.</span></li>
+      </ol>
+      <div class="note-box">Esta vista não abre modais. Só a zona <b>&lt;main&gt;</b> muda entre vistas; o cabeçalho e o rodapé ficam.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PAGE 3: O que faço? ============ -->
+<section class="sheet">
+  <div class="sheet-header"><h1>Vista 2: "O que faço?"</h1><span>#/o-que-faco</span></div>
+  <div class="stage">
+    <div>
+      <p class="label">Desktop (≥ 760 px)</p>
+      <div class="frame desktop">
+        <div class="browser-bar"><i></i><i></i><i></i><b>index.html#/o-que-faco</b></div>
+        <div class="wf-header">
+          <div class="brand">Milena Maganin <small>Analista de Sistemas e Team Lead</small></div>
+          <div class="nav"><span>Quem Sou Eu?</span><span class="active">O que faço?</span><span>Hobbies</span></div>
+        </div>
+        <div class="wf-main">
+          <div class="view-title">O que faço?</div>
+          <div class="panel">
+            <div class="panel-title">Experiência profissional <span class="marker">1</span></div>
+            <div class="item"><div class="period">DESDE MAIO 2025</div><div class="title">D2C Team Lead | Line Manager</div><div class="place">Nestlé</div></div>
+            <div class="item"><div class="period">2024–2025</div><div class="title">D2C Technical Coordinator</div><div class="place">Nestlé</div></div>
+            <div class="item"><div class="period">2021–2024</div><div class="title">Front-end Developer</div><div class="place">McFadyen Digital</div></div>
+            <span class="data">v-for: cv.experience[ ] × 3 (period · role · company · description)</span>
+          </div>
+          <div class="panel">
+            <div class="panel-title">Projetos <span class="marker">2</span></div>
+            <div class="hint">Selecione um projeto para ver o detalhe.</div>
+            <div class="card-grid">
+              <div class="card"><b>Nescafé Dolce Gusto</b><em>Operação global dos websites</em><u>Ver detalhe →</u></div>
+              <div class="card"><b>FedEx – Print on Demand</b><em>Marketplace em Magento 2</em><u>Ver detalhe →</u></div>
+              <div class="card"><b>Hearst – ShopBazaar</b><em>Componentes React com Magento PWA Studio</em><u>Ver detalhe →</u></div>
+              <div class="card"><b>L4 Filmes</b><em>Produção executiva audiovisual</em><u>Ver detalhe →</u></div>
+            </div>
+            <span class="data">v-for: cv.projects[ ] × 4 (title · summary) → modal</span>
+          </div>
+          <div class="panel">
+            <div class="panel-title">Competências <span class="marker">3</span></div>
+            <div class="tags"><span>HTML</span><span>CSS</span><span>JavaScript</span><span>TypeScript</span><span>React</span><span>Vue.js</span><span>Magento 2</span><span>Git</span><span>Gestão de projetos</span><span>Gestão de equipas</span></div>
+            <span class="data">v-for: cv.skills[ ] × 10</span>
+          </div>
+        </div>
+        <div class="wf-footer"><div class="social"><span>in</span><span>GH</span><span>@</span></div>© 2026 Milena Maganin · Miniprojeto 1</div>
+      </div>
+    </div>
+    <div>
+      <p class="label">Telemóvel (375 px)</p>
+      <div class="frame mobile">
+        <div class="browser-bar"><b>#/o-que-faco</b></div>
+        <div class="wf-header">
+          <div class="brand">Milena Maganin <small>Analista de Sistemas e Team Lead</small></div>
+          <div class="nav"><span>Quem Sou Eu?</span><span class="active">O que faço?</span><span>Hobbies</span></div>
+        </div>
+        <div class="wf-main">
+          <div class="view-title">O que faço?</div>
+          <div class="panel"><div class="panel-title">Experiência profissional</div>
+            <div class="item"><div class="period">DESDE 2025</div><div class="text-line"></div></div>
+            <div class="item"><div class="period">2024–2025</div><div class="text-line"></div></div>
+            <div class="item"><div class="period">2021–2024</div><div class="text-line"></div></div>
+          </div>
+          <div class="panel"><div class="panel-title">Projetos</div>
+            <div class="card-grid">
+              <div class="card"><b>Nescafé Dolce Gusto</b><u>Ver detalhe →</u></div>
+              <div class="card"><b>FedEx – Print on Demand</b><u>Ver detalhe →</u></div>
+              <div class="card"><b>Hearst – ShopBazaar</b><u>Ver detalhe →</u></div>
+              <div class="card"><b>L4 Filmes</b><u>Ver detalhe →</u></div>
+            </div>
+          </div>
+          <div class="panel"><div class="panel-title">Competências</div><div class="tags"><span>HTML</span><span>CSS</span><span>JS</span><span>…</span></div></div>
+        </div>
+        <div class="wf-footer"><div class="social"><span>in</span><span>GH</span><span>@</span></div>©</div>
+      </div>
+    </div>
+    <div class="notes">
+      <h2>Anotações</h2>
+      <ol>
+        <li><span class="marker">1</span><span>Experiência em cronologia (mais recente primeiro): período, cargo, empresa e descrição curta.</span></li>
+        <li><span class="marker">2</span><span><b>Cartões de projeto</b> (são botões): o clique ou Enter abre o <b>modal</b> com a descrição e as tecnologias do projeto. 2 colunas no desktop/tablet, 1 coluna no telemóvel.</span></li>
+        <li><span class="marker">3</span><span>Competências em etiquetas, que quebram linha automaticamente.</span></li>
+      </ol>
+      <div class="note-box">Abrir o modal <b>não</b> muda a URL: a vista continua a ser <code>#/o-que-faco</code>. Se o utilizador carregar em Voltar com o modal aberto, o modal fecha e a vista anterior aparece.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PAGE 4: Hobbies ============ -->
+<section class="sheet">
+  <div class="sheet-header"><h1>Vista 3: "Hobbies"</h1><span>#/hobbies</span></div>
+  <div class="stage">
+    <div>
+      <p class="label">Desktop (≥ 760 px)</p>
+      <div class="frame desktop">
+        <div class="browser-bar"><i></i><i></i><i></i><b>index.html#/hobbies</b></div>
+        <div class="wf-header">
+          <div class="brand">Milena Maganin <small>Analista de Sistemas e Team Lead</small></div>
+          <div class="nav"><span>Quem Sou Eu?</span><span>O que faço?</span><span class="active">Hobbies</span></div>
+        </div>
+        <div class="wf-main" style="min-height:62mm">
+          <div class="view-title">Hobbies</div>
+          <div class="hint">Selecione um hobby para saber mais. <span class="marker">1</span></div>
+          <div class="card-grid">
+            <div class="card"><b>Música</b><em>Guitarra e DJ</em><u>Saber mais →</u></div>
+            <div class="card"><b>Games</b><em>PS5, emuladores retro e PC</em><u>Saber mais →</u></div>
+            <div class="card"><b>Filmes, séries e livros</b><em>Boas histórias, em qualquer formato</em><u>Saber mais →</u></div>
+            <div class="card"><b>Viagens</b><em>Conhecer lugares novos</em><u>Saber mais →</u></div>
+          </div>
+          <span class="data">v-for: cv.hobbies[ ] × 4 (title · summary) → modal</span>
+        </div>
+        <div class="wf-footer"><div class="social"><span>in</span><span>GH</span><span>@</span></div>© 2026 Milena Maganin · Miniprojeto 1</div>
+      </div>
+    </div>
+    <div>
+      <p class="label">Telemóvel (375 px)</p>
+      <div class="frame mobile">
+        <div class="browser-bar"><b>#/hobbies</b></div>
+        <div class="wf-header">
+          <div class="brand">Milena Maganin <small>Analista de Sistemas e Team Lead</small></div>
+          <div class="nav"><span>Quem Sou Eu?</span><span>O que faço?</span><span class="active">Hobbies</span></div>
+        </div>
+        <div class="wf-main">
+          <div class="view-title">Hobbies</div>
+          <div class="card-grid">
+            <div class="card"><b>Música</b><em>Guitarra e DJ</em><u>Saber mais →</u></div>
+            <div class="card"><b>Games</b><em>PS5, emuladores retro e PC</em><u>Saber mais →</u></div>
+            <div class="card"><b>Filmes, séries e livros</b><u>Saber mais →</u></div>
+            <div class="card"><b>Viagens</b><u>Saber mais →</u></div>
+          </div>
+        </div>
+        <div class="wf-footer"><div class="social"><span>in</span><span>GH</span><span>@</span></div>©</div>
+      </div>
+    </div>
+    <div class="notes">
+      <h2>Anotações</h2>
+      <ol>
+        <li><span class="marker">1</span><span>Quatro cartões, um por hobby. O clique ou Enter abre o mesmo <b>modal</b> usado nos projetos, agora com a categoria "Hobby", a descrição curta e as etiquetas.</span></li>
+      </ol>
+      <div class="note-box">A grelha é a mesma componente visual dos projetos (reutilização de estilos): 2 colunas no desktop/tablet, 1 coluna no telemóvel.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PAGE 5: Modal ============ -->
+<section class="sheet">
+  <div class="sheet-header"><h1>Janela modal (projetos e hobbies)</h1><span>Exemplo: projeto "Hearst – ShopBazaar"</span></div>
+  <div class="stage">
+    <div>
+      <p class="label">Desktop: caixa centrada</p>
+      <div class="frame desktop" style="height:112mm">
+        <div class="browser-bar"><i></i><i></i><i></i><b>index.html#/o-que-faco</b> (a URL não muda)</div>
+        <div class="wf-header">
+          <div class="brand">Milena Maganin <small>Analista de Sistemas e Team Lead</small></div>
+          <div class="nav"><span>Quem Sou Eu?</span><span class="active">O que faço?</span><span>Hobbies</span></div>
+        </div>
+        <div class="wf-main"><div class="view-title">O que faço?</div><div class="panel"><div class="card-grid"><div class="card">&nbsp;</div><div class="card">&nbsp;</div><div class="card">&nbsp;</div><div class="card">&nbsp;</div></div></div><div class="panel"><div class="text-line"></div></div></div>
+        <div class="overlay"></div>
+        <div class="wf-modal" style="left:28mm; right:28mm; top:30mm;">
+          <div class="close">×</div>
+          <div class="category">PROJETO <span class="marker">1</span></div>
+          <div class="modal-title">Hearst – ShopBazaar <span class="marker">2</span></div>
+          <div style="color:#555; font-weight:600">Componentes React com Magento PWA Studio</div>
+          <p style="margin:1.5mm 0">Desenvolvimento de componentes React com Magento PWA Studio, integrados com o CMS Contentful através de GraphQL.</p>
+          <div class="tags"><span>React</span><span>Magento PWA Studio</span><span>Contentful</span><span>GraphQL</span></div>
+          <span class="data">modalItem = { ...project, category }</span>
+        </div>
+        <span class="marker absolute" style="right:25mm; top:27mm">3</span>
+        <span class="marker absolute" style="left:6mm; bottom:6mm">4</span>
+      </div>
+    </div>
+    <div>
+      <p class="label">Telemóvel: folha no fundo</p>
+      <div class="frame mobile" style="height:112mm">
+        <div class="browser-bar"><b>#/o-que-faco</b></div>
+        <div class="wf-header">
+          <div class="brand">Milena Maganin</div>
+          <div class="nav"><span>Quem Sou Eu?</span><span class="active">O que faço?</span><span>Hobbies</span></div>
+        </div>
+        <div class="wf-main"><div class="card">&nbsp;</div><div class="card">&nbsp;</div></div>
+        <div class="overlay"></div>
+        <div class="wf-modal" style="left:0; right:0; bottom:0; border-radius:3mm 3mm 0 0;">
+          <div class="close">×</div>
+          <div class="category">PROJETO</div>
+          <div class="modal-title" style="font-size:9.5pt">Hearst – ShopBazaar</div>
+          <div style="color:#555; font-weight:600">Componentes React com Magento PWA Studio</div>
+          <div class="text-line"></div><div class="text-line"></div><div class="text-line" style="width:60%"></div>
+          <div class="tags"><span>React</span><span>Contentful</span><span>GraphQL</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="notes">
+      <h2>Anotações</h2>
+      <ol>
+        <li><span class="marker">1</span><span>Categoria: "Projeto" ou "Hobby", conforme o cartão que abriu o modal.</span></li>
+        <li><span class="marker">2</span><span>Título, resumo, descrição e etiquetas vêm do item clicado. É o <b>mesmo</b> modal para os 8 itens (4 projetos + 4 hobbies).</span></li>
+        <li><span class="marker">3</span><span><b>Fechar</b>: botão ×, tecla <b>Esc</b> ou clique no fundo escuro. O foco volta ao cartão que abriu o modal.</span></li>
+        <li><span class="marker">4</span><span>Fundo escurecido; a página por trás não faz scroll e o Tab fica preso dentro do modal.</span></li>
+      </ol>
+      <div class="note-box">Acessibilidade: <code>role="dialog"</code>, <code>aria-modal="true"</code>, <code>aria-labelledby</code> (título) e foco inicial no botão ×. No telemóvel o modal ocupa a largura toda e sobe a partir do fundo; a partir de 600 px fica centrado.</div>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>
