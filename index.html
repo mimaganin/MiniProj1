@@ -52,6 +52,8 @@
       color: var(--text); text-decoration: none; font-weight: 500; white-space: nowrap;
     }
     .main-nav a:hover { background: var(--bg-alt); }
+    /* Current view link: the highlight is tied to aria-current, so state and style never diverge */
+    .main-nav a[aria-current="page"] { background: var(--accent); color: #fff; }
 
     /* ===== 4. Main content ===== */
     .content { flex: 1; padding: 24px 0 40px; }
@@ -60,6 +62,44 @@
       border-radius: var(--radius); padding: 20px; margin-top: 20px;
     }
     .panel h3 { margin: 0 0 12px; font-size: 1.125rem; }
+    .view-title { margin: 0; font-size: 1.75rem; }
+    .hint { margin: 4px 0 0; color: var(--text-muted); font-size: .9375rem; }
+
+    /* Intro block ("Quem Sou Eu?") */
+    .intro { border-left: 4px solid var(--accent); }
+    .intro p { margin: 0; }
+    .intro-name { font-size: 1.375rem; font-weight: 700; }
+    .intro-role { color: var(--accent); font-weight: 600; margin-bottom: 8px !important; }
+
+    /* Timeline (education and experience): a list with a vertical line on the left */
+    .timeline { list-style: none; margin: 0; padding: 0; }
+    .timeline li {
+      display: flex; flex-direction: column;
+      padding: 8px 0 8px 16px; border-left: 3px solid var(--accent-soft);
+    }
+    .timeline li + li { margin-top: 4px; }
+    .period { font-size: .8125rem; font-weight: 600; color: var(--accent); text-transform: uppercase; letter-spacing: .02em; }
+    .item-title { font-weight: 600; }
+    .item-place, .item-description { color: var(--text-muted); font-size: .9375rem; }
+    .plain-list { margin: 0; padding-left: 20px; }
+
+    /* Card grid (projects and hobbies) */
+    .card-grid { list-style: none; margin: 16px 0 0; padding: 0; display: grid; gap: 12px; grid-template-columns: 1fr; }
+    .card {
+      display: flex; flex-direction: column; gap: 4px; width: 100%; height: 100%;
+      padding: 16px; text-align: left; font: inherit; color: inherit;
+      background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius);
+    }
+    .card-title { font-weight: 700; font-size: 1.0625rem; }
+    .card-summary { color: var(--text-muted); }
+
+    /* Tags (skills and technologies) */
+    .tags { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+    .tags li {
+      padding: 2px 10px; border-radius: 999px; font-size: .875rem;
+      background: var(--accent-soft); color: var(--accent);
+    }
+
     /* ===== 5. Footer with social links ===== */
     .site-footer { background: var(--bg); border-top: 1px solid var(--border); }
     .site-footer .container {
@@ -92,7 +132,10 @@
         <nav class="main-nav" aria-label="Secções do currículo">
           <ul>
             <li v-for="view in views" :key="view.id">
-              <a :href="'#/' + view.id">{{ view.title }}</a>
+              <!-- Internal link: it only changes the URL fragment (#/...), so the page does NOT reload.
+                   aria-current marks the current view's link (the CSS uses it for the highlight). -->
+              <a :href="'#/' + view.id"
+                 :aria-current="currentView === view.id ? 'page' : null">{{ view.title }}</a>
             </li>
           </ul>
         </nav>
@@ -102,7 +145,81 @@
     <!-- CONTENT: the area that switches between the three views -->
     <main id="content" class="content">
       <div class="container">
-        <p>Conteúdo das vistas (próxima etapa).</p>
+        <!-- Current view title (a computed value: it updates by itself when the view changes) -->
+        <h2 id="view-title" ref="viewTitle" class="view-title" tabindex="-1">{{ currentTitle }}</h2>
+
+        <!-- VIEW 1: Quem Sou Eu? (v-if: only exists in the DOM while it is the current view) -->
+        <section v-if="currentView === 'quem-sou-eu'" class="view" aria-labelledby="view-title">
+          <div class="panel intro">
+            <p class="intro-name">{{ cv.name }}</p>
+            <p class="intro-role">{{ cv.role }}</p>
+            <p>{{ cv.about.summary }}</p>
+          </div>
+
+          <div class="panel">
+            <h3>Percurso académico</h3>
+            <ol class="timeline">
+              <li v-for="item in cv.about.education" :key="item.course">
+                <span class="period">{{ item.period }}</span>
+                <span class="item-title">{{ item.course }}</span>
+                <span class="item-place">{{ item.institution }}</span>
+              </li>
+            </ol>
+          </div>
+
+          <div class="panel">
+            <h3>Antes da tecnologia</h3>
+            <ul class="plain-list">
+              <li v-for="entry in cv.about.beforeTech" :key="entry">{{ entry }}</li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- VIEW 2: O que faço? -->
+        <section v-else-if="currentView === 'o-que-faco'" class="view" aria-labelledby="view-title">
+          <div class="panel">
+            <h3>Experiência profissional</h3>
+            <ol class="timeline">
+              <li v-for="job in cv.experience" :key="job.role">
+                <span class="period">{{ job.period }}</span>
+                <span class="item-title">{{ job.role }}</span>
+                <span class="item-place">{{ job.company }}</span>
+                <span v-if="job.description" class="item-description">{{ job.description }}</span>
+              </li>
+            </ol>
+          </div>
+
+          <div class="panel">
+            <h3>Projetos</h3>
+            <ul class="card-grid">
+              <li v-for="project in cv.projects" :key="project.id">
+                <div class="card">
+                  <span class="card-title">{{ project.title }}</span>
+                  <span class="card-summary">{{ project.summary }}</span>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <div class="panel">
+            <h3>Competências</h3>
+            <ul class="tags">
+              <li v-for="skill in cv.skills" :key="skill">{{ skill }}</li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- VIEW 3: Hobbies -->
+        <section v-else-if="currentView === 'hobbies'" class="view" aria-labelledby="view-title">
+          <ul class="card-grid">
+            <li v-for="hobby in cv.hobbies" :key="hobby.id">
+              <div class="card">
+                <span class="card-title">{{ hobby.title }}</span>
+                <span class="card-summary">{{ hobby.summary }}</span>
+              </div>
+            </li>
+          </ul>
+        </section>
       </div>
     </main>
 
@@ -215,16 +332,61 @@
       { id: 'o-que-faco', title: 'O que faço?' },
       { id: 'hobbies', title: 'Hobbies' }
     ];
+    const DEFAULT_VIEW = 'quem-sou-eu';
 
     /* =====================================================================
-       2. VUE APP
+       2. HASH ROUTER (no libraries)
+       Reads the URL fragment (e.g. "#/hobbies") and returns the view id,
+       or null when the fragment does not match any view.
+       ===================================================================== */
+    function getViewFromHash() {
+      const id = window.location.hash.replace(/^#\/?/, ''); // "#/hobbies" -> "hobbies"
+      return views.some(v => v.id === id) ? id : null;
+    }
+
+    /* =====================================================================
+       3. VUE APP
        createApp() creates the app; setup() returns everything the template uses.
        ===================================================================== */
-    const { createApp } = Vue;
+    const { createApp, ref, computed, nextTick, onMounted, onBeforeUnmount } = Vue;
 
     createApp({
       setup() {
-        return { cv, views };
+        // --- Reactive state: when it changes, Vue updates the DOM by itself ---
+        const currentView = ref(getViewFromHash() || DEFAULT_VIEW);
+        const currentTitle = computed(() => views.find(v => v.id === currentView.value).title);
+        const viewTitle = ref(null); // reference to the <h2> (ref="viewTitle" in the template)
+
+        // Keeps the browser tab title in sync with the view
+        function updateDocumentTitle() {
+          document.title = currentTitle.value + ' · ' + cv.name;
+        }
+
+        // Swaps the current URL without adding a new history entry
+        function replaceHash(id) {
+          try { history.replaceState(null, '', '#/' + id); }
+          catch (e) { location.replace('#/' + id); } // fallback, just in case
+        }
+
+        // --- Runs whenever the fragment changes: link click, Back/Forward, URL typed by hand ---
+        function onHashChange() {
+          const id = getViewFromHash();
+          if (!id) replaceHash(DEFAULT_VIEW);        // invalid fragment -> default view
+          currentView.value = id || DEFAULT_VIEW;    // Vue swaps the view in the DOM
+          updateDocumentTitle();
+        }
+
+        // --- Lifecycle: add and remove the event listeners ---
+        onMounted(() => {
+          if (!getViewFromHash()) replaceHash(DEFAULT_VIEW); // opened with no hash -> #/quem-sou-eu
+          updateDocumentTitle();
+          window.addEventListener('hashchange', onHashChange);
+        });
+        onBeforeUnmount(() => {
+          window.removeEventListener('hashchange', onHashChange);
+        });
+
+        return { cv, views, currentView, currentTitle, viewTitle };
       }
     }).mount('#app'); // binds the app to <div id="app">
   </script>
