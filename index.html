@@ -89,9 +89,12 @@
       display: flex; flex-direction: column; gap: 4px; width: 100%; height: 100%;
       padding: 16px; text-align: left; font: inherit; color: inherit;
       background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius);
+      cursor: pointer; transition: border-color .15s, box-shadow .15s;
     }
+    .card:hover { border-color: var(--accent); box-shadow: 0 2px 8px rgba(15, 110, 106, .12); }
     .card-title { font-weight: 700; font-size: 1.0625rem; }
     .card-summary { color: var(--text-muted); }
+    .card-more { margin-top: auto; padding-top: 6px; font-size: .875rem; font-weight: 600; color: var(--accent); }
 
     /* Tags (skills and technologies) */
     .tags { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
@@ -100,7 +103,35 @@
       background: var(--accent-soft); color: var(--accent);
     }
 
-    /* ===== 5. Footer with social links ===== */
+    /* ===== 5. Modal: on mobile it opens as a bottom sheet ===== */
+    body.no-scroll { overflow: hidden; } /* stops the page from scrolling behind the modal */
+    .modal-backdrop {
+      position: fixed; inset: 0; z-index: 50;
+      display: flex; align-items: flex-end; justify-content: center;
+      background: rgba(15, 23, 42, .55);
+    }
+    .modal {
+      position: relative; width: 100%; max-height: 90vh; overflow-y: auto;
+      padding: 24px 20px; background: var(--bg);
+      border-radius: var(--radius) var(--radius) 0 0;
+    }
+    .modal-close {
+      position: absolute; top: 12px; right: 12px; width: 40px; height: 40px;
+      border: 1px solid var(--border); border-radius: 50%; background: var(--bg);
+      font-size: 1.5rem; line-height: 1; color: var(--text); cursor: pointer;
+    }
+    .modal-close:hover { border-color: var(--accent); color: var(--accent); }
+    .modal-category { margin: 0; font-size: .8125rem; font-weight: 600; text-transform: uppercase; color: var(--accent); }
+    .modal-title { margin: 4px 48px 4px 0; font-size: 1.5rem; }
+    .modal-summary { margin: 0 0 12px; color: var(--text-muted); font-weight: 500; }
+
+    /* Enter/leave animation: classes added and removed by Vue's <transition> */
+    .modal-enter-active, .modal-leave-active { transition: opacity .2s ease; }
+    .modal-enter-active .modal, .modal-leave-active .modal { transition: transform .2s ease; }
+    .modal-enter-from, .modal-leave-to { opacity: 0; }
+    .modal-enter-from .modal, .modal-leave-to .modal { transform: translateY(24px); }
+
+    /* ===== 6. Footer with social links ===== */
     .site-footer { background: var(--bg); border-top: 1px solid var(--border); }
     .site-footer .container {
       display: flex; flex-direction: column; align-items: center; gap: 10px;
@@ -191,12 +222,15 @@
 
           <div class="panel">
             <h3>Projetos</h3>
+            <p class="hint">Selecione um projeto para ver o detalhe.</p>
             <ul class="card-grid">
               <li v-for="project in cv.projects" :key="project.id">
-                <div class="card">
+                <!-- <button> (not <div>): focusable and responds to Enter/Space with no extra code -->
+                <button type="button" class="card" aria-haspopup="dialog" @click="openModal(project, 'Projeto', $event)">
                   <span class="card-title">{{ project.title }}</span>
                   <span class="card-summary">{{ project.summary }}</span>
-                </div>
+                  <span class="card-more" aria-hidden="true">Ver detalhe →</span>
+                </button>
               </li>
             </ul>
           </div>
@@ -211,17 +245,41 @@
 
         <!-- VIEW 3: Hobbies -->
         <section v-else-if="currentView === 'hobbies'" class="view" aria-labelledby="view-title">
+          <p class="hint">Selecione um hobby para saber mais.</p>
           <ul class="card-grid">
             <li v-for="hobby in cv.hobbies" :key="hobby.id">
-              <div class="card">
+              <button type="button" class="card" aria-haspopup="dialog" @click="openModal(hobby, 'Hobby', $event)">
                 <span class="card-title">{{ hobby.title }}</span>
                 <span class="card-summary">{{ hobby.summary }}</span>
-              </div>
+                <span class="card-more" aria-hidden="true">Saber mais →</span>
+              </button>
             </li>
           </ul>
         </section>
       </div>
     </main>
+
+    <!-- SINGLE REUSABLE MODAL: only exists in the DOM while modalItem holds an item.
+         Its content comes from the clicked item (project or hobby). -->
+    <transition name="modal">
+      <div v-if="modalItem" class="modal-backdrop" @click.self="closeModal()">
+        <!-- @click.self: only closes when the click lands on the dark backdrop, not inside the box -->
+        <div ref="modalBox" class="modal" role="dialog" aria-modal="true"
+             aria-labelledby="modal-title" aria-describedby="modal-description"
+             @keydown="trapFocus">
+          <button ref="closeButton" type="button" class="modal-close" aria-label="Fechar" @click="closeModal()">
+            <span aria-hidden="true">×</span>
+          </button>
+          <p class="modal-category">{{ modalItem.category }}</p>
+          <h2 id="modal-title" class="modal-title">{{ modalItem.title }}</h2>
+          <p class="modal-summary">{{ modalItem.summary }}</p>
+          <p id="modal-description">{{ modalItem.description }}</p>
+          <ul v-if="modalItem.tags" class="tags">
+            <li v-for="tag in modalItem.tags" :key="tag">{{ tag }}</li>
+          </ul>
+        </div>
+      </div>
+    </transition>
 
     <!-- FOOTER: fixed, shows the online identity (inline SVG icons) -->
     <footer class="site-footer">
@@ -373,7 +431,44 @@
           const id = getViewFromHash();
           if (!id) replaceHash(DEFAULT_VIEW);        // invalid fragment -> default view
           currentView.value = id || DEFAULT_VIEW;    // Vue swaps the view in the DOM
+          closeModal(false);                         // if the modal was open (e.g. Back), close it
           updateDocumentTitle();
+        }
+
+        // --- Reusable modal ---
+        const modalItem = ref(null);   // null = closed; an object = open with that data
+        const closeButton = ref(null); // reference to the "×" button
+        const modalBox = ref(null);    // reference to the dialog box
+        let previousFocus = null;      // card that opened the modal (focus goes back to it)
+
+        function openModal(item, category, event) {
+          previousFocus = event.currentTarget;
+          modalItem.value = { ...item, category }; // copy the item data and add the category
+          document.body.classList.add('no-scroll');
+          nextTick(() => closeButton.value.focus()); // wait for Vue to render the modal, then focus "×"
+        }
+
+        function closeModal(restoreFocus = true) {
+          if (!modalItem.value) return;
+          modalItem.value = null; // v-if removes the modal from the DOM
+          document.body.classList.remove('no-scroll');
+          if (restoreFocus && previousFocus) previousFocus.focus();
+          previousFocus = null;
+        }
+
+        // Esc closes the modal (global listener on the document)
+        function onKeydown(event) {
+          if (event.key === 'Escape' && modalItem.value) closeModal();
+        }
+
+        // Keeps Tab inside the modal while it is open (focus can't escape to the page behind it)
+        function trapFocus(event) {
+          if (event.key !== 'Tab') return;
+          const focusable = modalBox.value.querySelectorAll('button, a[href], [tabindex]:not([tabindex="-1"])');
+          const first = focusable[0];
+          const last = focusable[focusable.length - 1];
+          if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+          else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
         }
 
         // --- Lifecycle: add and remove the event listeners ---
@@ -381,12 +476,17 @@
           if (!getViewFromHash()) replaceHash(DEFAULT_VIEW); // opened with no hash -> #/quem-sou-eu
           updateDocumentTitle();
           window.addEventListener('hashchange', onHashChange);
+          document.addEventListener('keydown', onKeydown);
         });
         onBeforeUnmount(() => {
           window.removeEventListener('hashchange', onHashChange);
+          document.removeEventListener('keydown', onKeydown);
         });
 
-        return { cv, views, currentView, currentTitle, viewTitle };
+        return {
+          cv, views, currentView, currentTitle, viewTitle,
+          modalItem, closeButton, modalBox, openModal, closeModal, trapFocus
+        };
       }
     }).mount('#app'); // binds the app to <div id="app">
   </script>
