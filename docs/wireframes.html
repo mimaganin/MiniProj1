@@ -68,6 +68,14 @@
   .card b { display: block; }
   .card em { font-style: normal; color: #666; display: block; }
   .card u { text-decoration: none; font-size: 6pt; font-weight: 700; color: #444; }
+  /* Icon placeholder (wireframe convention: a box with an X) */
+  .icon-placeholder {
+    display: block; width: 7mm; height: 7mm; margin-bottom: 1mm; border: 1px solid #777; border-radius: 1.5mm;
+    background:
+      linear-gradient(to top right, transparent calc(50% - .5px), #999 50%, transparent calc(50% + .5px)),
+      linear-gradient(to top left, transparent calc(50% - .5px), #999 50%, transparent calc(50% + .5px)), #eee;
+  }
+  .mobile .icon-placeholder { width: 5.5mm; height: 5.5mm; }
   .tags { display: flex; flex-wrap: wrap; gap: 1mm; }
   .tags span { border: 1px solid #aaa; border-radius: 2mm; padding: 0 1.5mm; font-size: 6pt; background: #eee; }
   .hint { font-size: 6.5pt; color: #666; margin-bottom: 1mm; }
@@ -139,6 +147,7 @@
       <div class="notes">
         <div class="note-box">
           <b>Legenda.</b> Caixas cinzentas = blocos de conteúdo · linhas cinzentas = texto corrido ·
+          caixa com X = ícone ·
           <span class="data">cv.field</span> = dados do objeto <code>cv</code> no JavaScript que preenchem essa zona ·
           <span class="marker">n</span> = anotação explicada ao lado de cada folha.
           Escuro no menu = vista ativa (<code>aria-current="page"</code>).
@@ -154,11 +163,11 @@
           <tr><td><code>views[]</code> (3)</td><td>Menu do cabeçalho; título h2 da vista</td><td>Links <code>v-for</code></td></tr>
           <tr><td><code>cv.about.summary</code></td><td>Quem Sou Eu?</td><td>Bloco de apresentação</td></tr>
           <tr><td><code>cv.about.education[]</code> (5)</td><td>Quem Sou Eu?</td><td>Cronologia: período, curso, instituição</td></tr>
+          <tr><td><code>cv.about.experience[]</code> (3)</td><td>Quem Sou Eu?</td><td>Cronologia: período, cargo, empresa, descrição</td></tr>
           <tr><td><code>cv.about.beforeTech[]</code> (5)</td><td>Quem Sou Eu?</td><td>Lista simples</td></tr>
-          <tr><td><code>cv.experience[]</code> (3)</td><td>O que faço?</td><td>Cronologia: período, cargo, empresa, descrição</td></tr>
           <tr><td><code>cv.projects[]</code> (4)</td><td>O que faço?</td><td>Cartões (título + resumo) → modal com descrição e tecnologias</td></tr>
           <tr><td><code>cv.skills[]</code> (10)</td><td>O que faço?</td><td>Etiquetas</td></tr>
-          <tr><td><code>cv.hobbies[]</code> (4)</td><td>Hobbies</td><td>Cartões → modal com descrição e etiquetas</td></tr>
+          <tr><td><code>cv.hobbies[]</code> (4)</td><td>Hobbies</td><td>Cartões com ícone → modal com ícone, descrição e etiquetas</td></tr>
           <tr><td><code>cv.social[]</code> (3)</td><td>Rodapé (todas)</td><td>Ícones SVG com link</td></tr>
         </tbody>
       </table>
@@ -202,12 +211,19 @@
             <span class="data">v-for: cv.about.education[ ] × 5 (period · course · institution)</span>
           </div>
           <div class="panel">
-            <div class="panel-title">Antes da tecnologia <span class="marker">5</span></div>
+            <div class="panel-title">Experiência profissional <span class="marker">5</span></div>
+            <div class="item compact"><span class="period">DESDE MAIO 2025</span><span class="title">D2C Team Lead | Line Manager</span> <span class="place">· Nestlé</span></div>
+            <div class="item compact"><span class="period">2024–2025</span><span class="title">D2C Technical Coordinator</span> <span class="place">· Nestlé</span></div>
+            <div class="item compact"><span class="period">2021–2024</span><span class="title">Front-end Developer</span> <span class="place">· McFadyen Digital</span></div>
+            <span class="data">v-for: cv.about.experience[ ] × 3 (period · role · company · description)</span>
+          </div>
+          <div class="panel">
+            <div class="panel-title">Antes da tecnologia <span class="marker">6</span></div>
             <div class="text-line" style="width:40%"></div><div class="text-line" style="width:50%"></div>
             <span class="data">v-for: cv.about.beforeTech[ ] × 5</span>
           </div>
         </div>
-        <div class="wf-footer"><div class="social"><span>in</span><span>GH</span><span>@</span></div>© 2026 Milena Maganin · Miniprojeto 1 <span class="marker">6</span></div>
+        <div class="wf-footer"><div class="social"><span>in</span><span>GH</span><span>@</span></div>© 2026 Milena Maganin · Miniprojeto 1 <span class="marker">7</span></div>
       </div>
     </div>
     <div>
@@ -228,6 +244,11 @@
             <div class="item"><div class="period">2023–2025</div><div class="text-line"></div></div>
             <div class="item"><div class="period">2026</div><div class="text-line"></div></div>
           </div>
+          <div class="panel"><div class="panel-title">Experiência profissional</div>
+            <div class="item"><div class="period">DESDE 2025</div><div class="text-line"></div></div>
+            <div class="item"><div class="period">2024–2025</div><div class="text-line"></div></div>
+            <div class="item"><div class="period">2021–2024</div><div class="text-line"></div></div>
+          </div>
           <div class="panel"><div class="panel-title">Antes da tecnologia</div><div class="text-line"></div><div class="text-line" style="width:60%"></div></div>
         </div>
         <div class="wf-footer"><div class="social"><span>in</span><span>GH</span><span>@</span></div>©</div>
@@ -240,8 +261,9 @@
         <li><span class="marker">2</span><span>Título da vista (h2). Ao mudar de vista recebe o foco, para o leitor de ecrã anunciar a mudança.</span></li>
         <li><span class="marker">3</span><span>Bloco de apresentação, com uma barra lateral de destaque.</span></li>
         <li><span class="marker">4</span><span>Formação em cronologia (<code>v-for</code>): período, curso e instituição.</span></li>
-        <li><span class="marker">5</span><span>Lista do percurso anterior à tecnologia.</span></li>
-        <li><span class="marker">6</span><span>Rodapé fixo, igual nas três vistas.</span></li>
+        <li><span class="marker">5</span><span>Experiência profissional em cronologia (mais recente primeiro): período, cargo, empresa e descrição curta.</span></li>
+        <li><span class="marker">6</span><span>Lista do percurso anterior à tecnologia.</span></li>
+        <li><span class="marker">7</span><span>Rodapé fixo, igual nas três vistas.</span></li>
       </ol>
       <div class="note-box">Esta vista não abre modais. Só a zona <b>&lt;main&gt;</b> muda entre vistas; o cabeçalho e o rodapé ficam.</div>
     </div>
@@ -263,14 +285,7 @@
         <div class="wf-main">
           <div class="view-title">O que faço?</div>
           <div class="panel">
-            <div class="panel-title">Experiência profissional <span class="marker">1</span></div>
-            <div class="item"><div class="period">DESDE MAIO 2025</div><div class="title">D2C Team Lead | Line Manager</div><div class="place">Nestlé</div></div>
-            <div class="item"><div class="period">2024–2025</div><div class="title">D2C Technical Coordinator</div><div class="place">Nestlé</div></div>
-            <div class="item"><div class="period">2021–2024</div><div class="title">Front-end Developer</div><div class="place">McFadyen Digital</div></div>
-            <span class="data">v-for: cv.experience[ ] × 3 (period · role · company · description)</span>
-          </div>
-          <div class="panel">
-            <div class="panel-title">Projetos <span class="marker">2</span></div>
+            <div class="panel-title">Projetos <span class="marker">1</span></div>
             <div class="hint">Selecione um projeto para ver o detalhe.</div>
             <div class="card-grid">
               <div class="card"><b>Nescafé Dolce Gusto</b><em>Operação global dos websites</em><u>Ver detalhe →</u></div>
@@ -281,7 +296,7 @@
             <span class="data">v-for: cv.projects[ ] × 4 (title · summary) → modal</span>
           </div>
           <div class="panel">
-            <div class="panel-title">Competências <span class="marker">3</span></div>
+            <div class="panel-title">Competências <span class="marker">2</span></div>
             <div class="tags"><span>HTML</span><span>CSS</span><span>JavaScript</span><span>TypeScript</span><span>React</span><span>Vue.js</span><span>Magento 2</span><span>Git</span><span>Gestão de projetos</span><span>Gestão de equipas</span></div>
             <span class="data">v-for: cv.skills[ ] × 10</span>
           </div>
@@ -299,11 +314,6 @@
         </div>
         <div class="wf-main">
           <div class="view-title">O que faço?</div>
-          <div class="panel"><div class="panel-title">Experiência profissional</div>
-            <div class="item"><div class="period">DESDE 2025</div><div class="text-line"></div></div>
-            <div class="item"><div class="period">2024–2025</div><div class="text-line"></div></div>
-            <div class="item"><div class="period">2021–2024</div><div class="text-line"></div></div>
-          </div>
           <div class="panel"><div class="panel-title">Projetos</div>
             <div class="card-grid">
               <div class="card"><b>Nescafé Dolce Gusto</b><u>Ver detalhe →</u></div>
@@ -320,9 +330,8 @@
     <div class="notes">
       <h2>Anotações</h2>
       <ol>
-        <li><span class="marker">1</span><span>Experiência em cronologia (mais recente primeiro): período, cargo, empresa e descrição curta.</span></li>
-        <li><span class="marker">2</span><span><b>Cartões de projeto</b> (são botões): o clique ou Enter abre o <b>modal</b> com a descrição e as tecnologias do projeto. 2 colunas no desktop/tablet, 1 coluna no telemóvel.</span></li>
-        <li><span class="marker">3</span><span>Competências em etiquetas, que quebram linha automaticamente.</span></li>
+        <li><span class="marker">1</span><span><b>Cartões de projeto</b> (são botões): o clique ou Enter abre o <b>modal</b> com a descrição e as tecnologias do projeto. 2 colunas no desktop/tablet, 1 coluna no telemóvel.</span></li>
+        <li><span class="marker">2</span><span>Competências em etiquetas, que quebram linha automaticamente.</span></li>
       </ol>
       <div class="note-box">Abrir o modal <b>não</b> muda a URL: a vista continua a ser <code>#/o-que-faco</code>. Se o utilizador carregar em Voltar com o modal aberto, o modal fecha e a vista anterior aparece.</div>
     </div>
@@ -345,12 +354,12 @@
           <div class="view-title">Hobbies</div>
           <div class="hint">Selecione um hobby para saber mais. <span class="marker">1</span></div>
           <div class="card-grid">
-            <div class="card"><b>Música</b><em>Guitarra e DJ</em><u>Saber mais →</u></div>
-            <div class="card"><b>Games</b><em>PS5, emuladores retro e PC</em><u>Saber mais →</u></div>
-            <div class="card"><b>Filmes, séries e livros</b><em>Boas histórias, em qualquer formato</em><u>Saber mais →</u></div>
-            <div class="card"><b>Viagens</b><em>Conhecer lugares novos</em><u>Saber mais →</u></div>
+            <div class="card"><span class="icon-placeholder"></span><b>Música</b><em>Guitarra e DJ</em><u>Saber mais →</u></div>
+            <div class="card"><span class="icon-placeholder"></span><b>Games</b><em>PS5, emuladores retro e PC</em><u>Saber mais →</u></div>
+            <div class="card"><span class="icon-placeholder"></span><b>Filmes, séries e livros</b><em>Boas histórias, em qualquer formato</em><u>Saber mais →</u></div>
+            <div class="card"><span class="icon-placeholder"></span><b>Viagens</b><em>Conhecer lugares novos</em><u>Saber mais →</u></div>
           </div>
-          <span class="data">v-for: cv.hobbies[ ] × 4 (title · summary) → modal</span>
+          <span class="data">v-for: cv.hobbies[ ] × 4 (icon · title · summary) → modal</span> <span class="marker">2</span>
         </div>
         <div class="wf-footer"><div class="social"><span>in</span><span>GH</span><span>@</span></div>© 2026 Milena Maganin · Miniprojeto 1</div>
       </div>
@@ -366,10 +375,10 @@
         <div class="wf-main">
           <div class="view-title">Hobbies</div>
           <div class="card-grid">
-            <div class="card"><b>Música</b><em>Guitarra e DJ</em><u>Saber mais →</u></div>
-            <div class="card"><b>Games</b><em>PS5, emuladores retro e PC</em><u>Saber mais →</u></div>
-            <div class="card"><b>Filmes, séries e livros</b><u>Saber mais →</u></div>
-            <div class="card"><b>Viagens</b><u>Saber mais →</u></div>
+            <div class="card"><span class="icon-placeholder"></span><b>Música</b><em>Guitarra e DJ</em><u>Saber mais →</u></div>
+            <div class="card"><span class="icon-placeholder"></span><b>Games</b><em>PS5, emuladores retro e PC</em><u>Saber mais →</u></div>
+            <div class="card"><span class="icon-placeholder"></span><b>Filmes, séries e livros</b><u>Saber mais →</u></div>
+            <div class="card"><span class="icon-placeholder"></span><b>Viagens</b><u>Saber mais →</u></div>
           </div>
         </div>
         <div class="wf-footer"><div class="social"><span>in</span><span>GH</span><span>@</span></div>©</div>
@@ -378,7 +387,8 @@
     <div class="notes">
       <h2>Anotações</h2>
       <ol>
-        <li><span class="marker">1</span><span>Quatro cartões, um por hobby. O clique ou Enter abre o mesmo <b>modal</b> usado nos projetos, agora com a categoria "Hobby", a descrição curta e as etiquetas.</span></li>
+        <li><span class="marker">1</span><span>Quatro cartões, um por hobby. O clique ou Enter abre o mesmo <b>modal</b> usado nos projetos, agora com a categoria "Hobby", o ícone, a descrição curta e as etiquetas.</span></li>
+        <li><span class="marker">2</span><span><b>Ícones</b> em SVG inline (notas musicais, comando de consola, pipocas, avião), com a cor de destaque. Abanam ao passar o rato ou ao receber foco; o movimento é desligado com <code>prefers-reduced-motion</code>. São decorativos (<code>aria-hidden</code>): o nome do hobby está no texto.</span></li>
       </ol>
       <div class="note-box">A grelha é a mesma componente visual dos projetos (reutilização de estilos): 2 colunas no desktop/tablet, 1 coluna no telemóvel.</div>
     </div>
@@ -387,7 +397,7 @@
 
 <!-- ============ PAGE 5: Modal ============ -->
 <section class="sheet">
-  <div class="sheet-header"><h1>Janela modal (projetos e hobbies)</h1><span>Exemplo: projeto "Hearst – ShopBazaar"</span></div>
+  <div class="sheet-header"><h1>Janela modal (projetos e hobbies)</h1><span>Exemplos: projeto "Hearst – ShopBazaar" (desktop) e hobby "Games" (telemóvel)</span></div>
   <div class="stage">
     <div>
       <p class="label">Desktop: caixa centrada</p>
@@ -415,20 +425,21 @@
     <div>
       <p class="label">Telemóvel: folha no fundo</p>
       <div class="frame mobile" style="height:112mm">
-        <div class="browser-bar"><b>#/o-que-faco</b></div>
+        <div class="browser-bar"><b>#/hobbies</b></div>
         <div class="wf-header">
           <div class="brand">Milena Maganin</div>
-          <div class="nav"><span>Quem Sou Eu?</span><span class="active">O que faço?</span><span>Hobbies</span></div>
+          <div class="nav"><span>Quem Sou Eu?</span><span>O que faço?</span><span class="active">Hobbies</span></div>
         </div>
         <div class="wf-main"><div class="card">&nbsp;</div><div class="card">&nbsp;</div></div>
         <div class="overlay"></div>
         <div class="wf-modal" style="left:0; right:0; bottom:0; border-radius:3mm 3mm 0 0;">
           <div class="close">×</div>
-          <div class="category">PROJETO</div>
-          <div class="modal-title" style="font-size:9.5pt">Hearst – ShopBazaar</div>
-          <div style="color:#555; font-weight:600">Componentes React com Magento PWA Studio</div>
-          <div class="text-line"></div><div class="text-line"></div><div class="text-line" style="width:60%"></div>
-          <div class="tags"><span>React</span><span>Contentful</span><span>GraphQL</span></div>
+          <span class="icon-placeholder"></span>
+          <div class="category">HOBBY <span class="marker">5</span></div>
+          <div class="modal-title" style="font-size:9.5pt">Games</div>
+          <div style="color:#555; font-weight:600">PS5, emuladores retro e PC</div>
+          <div class="text-line"></div><div class="text-line" style="width:70%"></div>
+          <div class="tags"><span>PS5</span><span>Emuladores retro</span><span>PC</span></div>
         </div>
       </div>
     </div>
@@ -439,6 +450,7 @@
         <li><span class="marker">2</span><span>Título, resumo, descrição e etiquetas vêm do item clicado. É o <b>mesmo</b> modal para os 8 itens (4 projetos + 4 hobbies).</span></li>
         <li><span class="marker">3</span><span><b>Fechar</b>: botão ×, tecla <b>Esc</b> ou clique no fundo escuro. O foco volta ao cartão que abriu o modal.</span></li>
         <li><span class="marker">4</span><span>Fundo escurecido; a página por trás não faz scroll e o Tab fica preso dentro do modal.</span></li>
+        <li><span class="marker">5</span><span>Nos hobbies, o modal mostra também o ícone (<code>v-if</code>: só aparece quando o item tem ícone).</span></li>
       </ol>
       <div class="note-box">Acessibilidade: <code>role="dialog"</code>, <code>aria-modal="true"</code>, <code>aria-labelledby</code> (título) e foco inicial no botão ×. No telemóvel o modal ocupa a largura toda e sobe a partir do fundo; a partir de 600 px fica centrado.</div>
     </div>

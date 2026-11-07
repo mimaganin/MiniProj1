@@ -84,10 +84,14 @@ O CSS base é para ecrãs pequenos. A partir de 600 px os cartões passam a 2 co
 - Ao mudar de vista, o foco vai para o título `h2` da nova vista, para que o leitor de ecrã anuncie a mudança.
 - Os cartões são `<button>`: são focáveis e funcionam com Enter/Espaço sem código extra.
 - No modal: `role="dialog"`, `aria-modal="true"`, `aria-labelledby`, foco inicial no botão ×, Tab preso dentro do modal e foco devolvido ao cartão ao fechar (W3C WAI, s.d.).
-- Ícones SVG com `aria-hidden="true"`; o nome da rede está no `aria-label` do link.
-- Respeita `prefers-reduced-motion`.
+- Ícones SVG com `aria-hidden="true"`; o nome da rede está no `aria-label` do link e o nome do hobby está no texto do cartão.
+- Respeita `prefers-reduced-motion`, que também desliga a animação dos ícones dos hobbies.
 
-### 9. Convenção de nomes
+### 9. Ícones dos hobbies
+
+Cada hobby tem um ícone SVG inline (notas musicais, comando de consola, pipocas, avião), guardado como dados no próprio objeto (`cv.hobbies[].icon`, uma lista de traços `<path>`). Assim não há imagens nem bibliotecas externas. Os ícones usam a cor de destaque e abanam ao passar o rato ou ao receber foco, um toque divertido que não muda o design sóbrio do resto do site. O mesmo ícone aparece no modal do hobby (`v-if`, porque os projetos não têm ícone).
+
+### 10. Convenção de nomes
 
 Todo o **código** está em inglês: classes e variáveis CSS, ids, comentários, nomes de variáveis, funções e campos dos dados (`currentView`, `openModal`, `cv.about.education`…). O **conteúdo** visível está em português (PT-PT). A única exceção são os ids das vistas usados na URL (`#/quem-sou-eu`, `#/o-que-faco`, `#/hobbies`): fazem parte do endereço que o visitante vê e partilha, por isso ficam na língua do site.
 
@@ -105,10 +109,10 @@ Todo o **código** está em inglês: classes e variáveis CSS, ids, comentários
 Em `docs/wireframes.pdf` (fonte: `docs/wireframes.html`), em 5 páginas:
 
 1. Mapa de navegação e tabela de distribuição dos dados pelas vistas.
-2. "Quem Sou Eu?": desktop e telemóvel.
-3. "O que faço?": desktop e telemóvel.
-4. "Hobbies": desktop e telemóvel.
-5. Modal: desktop e telemóvel.
+2. "Quem Sou Eu?" (apresentação, percurso académico, experiência profissional, antes da tecnologia): desktop e telemóvel.
+3. "O que faço?" (projetos e competências): desktop e telemóvel.
+4. "Hobbies" (cartões com ícone): desktop e telemóvel.
+5. Modal: desktop (projeto) e telemóvel (hobby).
 
 Cada página tem anotações numeradas: que link leva a quê, o que abre o modal e o que fica fixo.
 

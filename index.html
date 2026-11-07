@@ -96,6 +96,22 @@
     .card-summary { color: var(--text-muted); }
     .card-more { margin-top: auto; padding-top: 6px; font-size: .875rem; font-weight: 600; color: var(--accent); }
 
+    /* Hobby icons: an SVG drawing inside a soft accent-coloured badge */
+    .hobby-icon {
+      display: inline-flex; align-items: center; justify-content: center; flex: none;
+      width: 52px; height: 52px; margin-bottom: 6px; border-radius: 14px;
+      background: var(--accent-soft); color: var(--accent);
+      transition: transform .2s ease;
+    }
+    .hobby-icon svg { width: 28px; height: 28px; }
+    /* Playful touch: the icon wiggles on hover or keyboard focus */
+    .card:hover .hobby-icon, .card:focus-visible .hobby-icon { animation: wiggle .5s ease; }
+    @keyframes wiggle {
+      0%, 100% { transform: rotate(0); }
+      25% { transform: rotate(-12deg) scale(1.08); }
+      75% { transform: rotate(10deg) scale(1.08); }
+    }
+
     /* Tags (skills and technologies) */
     .tags { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
     .tags li {
@@ -121,6 +137,7 @@
       font-size: 1.5rem; line-height: 1; color: var(--text); cursor: pointer;
     }
     .modal-close:hover { border-color: var(--accent); color: var(--accent); }
+    .modal .hobby-icon { margin-bottom: 10px; }
     .modal-category { margin: 0; font-size: .8125rem; font-weight: 600; text-transform: uppercase; color: var(--accent); }
     .modal-title { margin: 4px 48px 4px 0; font-size: 1.5rem; }
     .modal-summary { margin: 0 0 12px; color: var(--text-muted); font-weight: 500; }
@@ -236,19 +253,9 @@
           </div>
 
           <div class="panel">
-            <h3>Antes da tecnologia</h3>
-            <ul class="plain-list">
-              <li v-for="entry in cv.about.beforeTech" :key="entry">{{ entry }}</li>
-            </ul>
-          </div>
-        </section>
-
-        <!-- VIEW 2: O que faço? -->
-        <section v-else-if="currentView === 'o-que-faco'" class="view" aria-labelledby="view-title">
-          <div class="panel">
             <h3>Experiência profissional</h3>
             <ol class="timeline">
-              <li v-for="job in cv.experience" :key="job.role">
+              <li v-for="job in cv.about.experience" :key="job.role">
                 <span class="period">{{ job.period }}</span>
                 <span class="item-title">{{ job.role }}</span>
                 <span class="item-place">{{ job.company }}</span>
@@ -257,6 +264,16 @@
             </ol>
           </div>
 
+          <div class="panel">
+            <h3>Antes da tecnologia</h3>
+            <ul class="plain-list">
+              <li v-for="entry in cv.about.beforeTech" :key="entry">{{ entry }}</li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- VIEW 2: O que faço? (projects + skills) -->
+        <section v-else-if="currentView === 'o-que-faco'" class="view" aria-labelledby="view-title">
           <div class="panel">
             <h3>Projetos</h3>
             <p class="hint">Selecione um projeto para ver o detalhe.</p>
@@ -280,12 +297,19 @@
           </div>
         </section>
 
-        <!-- VIEW 3: Hobbies -->
+        <!-- VIEW 3: Hobbies (cards with an icon) -->
         <section v-else-if="currentView === 'hobbies'" class="view" aria-labelledby="view-title">
           <p class="hint">Selecione um hobby para saber mais.</p>
           <ul class="card-grid">
             <li v-for="hobby in cv.hobbies" :key="hobby.id">
               <button type="button" class="card" aria-haspopup="dialog" @click="openModal(hobby, 'Hobby', $event)">
+                <!-- Decorative icon (aria-hidden): the hobby name is already in the card text -->
+                <span class="hobby-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                       stroke-linecap="round" stroke-linejoin="round" focusable="false">
+                    <path v-for="d in hobby.icon" :key="d" :d="d"></path>
+                  </svg>
+                </span>
                 <span class="card-title">{{ hobby.title }}</span>
                 <span class="card-summary">{{ hobby.summary }}</span>
                 <span class="card-more" aria-hidden="true">Saber mais →</span>
@@ -307,6 +331,13 @@
           <button ref="closeButton" type="button" class="modal-close" aria-label="Fechar" @click="closeModal()">
             <span aria-hidden="true">×</span>
           </button>
+          <!-- Only hobbies have an icon: v-if shows it only when it exists -->
+          <span v-if="modalItem.icon" class="hobby-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                 stroke-linecap="round" stroke-linejoin="round" focusable="false">
+              <path v-for="d in modalItem.icon" :key="d" :d="d"></path>
+            </svg>
+          </span>
           <p class="modal-category">{{ modalItem.category }}</p>
           <h2 id="modal-title" class="modal-title">{{ modalItem.title }}</h2>
           <p class="modal-summary">{{ modalItem.summary }}</p>
@@ -352,7 +383,7 @@
       name: 'Milena Maganin',
       role: 'Analista de Sistemas e Team Lead',
 
-      // "Quem Sou Eu?" view: intro, education and earlier career
+      // "Quem Sou Eu?" view: intro, education, experience and earlier career
       about: {
         summary: 'Profissional brasileira a viver em Lisboa, com 15 anos de experiência em Comunicação e quase 10 anos a atuar na área de Tecnologia.',
         education: [
@@ -361,6 +392,13 @@
           { period: '2023–2024', course: 'CS50x – Introduction to Computer Science', institution: 'Harvard' },
           { period: '2023–2025', course: 'Tecnólogo em Análise e Desenvolvimento de Sistemas', institution: 'Universidade Católica de Brasília' },
           { period: '2026 – em curso', course: 'Mestrado em Engenharia Informática e Tecnologia Web', institution: 'UAb/UTAD' }
+        ],
+        experience: [
+          { period: 'Desde maio de 2025', role: 'D2C Team Lead | Line Manager', company: 'Nestlé',
+            description: 'Lidero a equipa de operações globais dos websites Nescafé Dolce Gusto.' },
+          { period: '2024–2025', role: 'D2C Technical Coordinator', company: 'Nestlé',
+            description: 'Coordenação técnica dos websites da Zona Europa.' },
+          { period: '2021–2024', role: 'Front-end Developer', company: 'McFadyen Digital', description: '' }
         ],
         beforeTech: [
           'Assessoria de imprensa',
@@ -372,13 +410,6 @@
       },
 
       // "O que faço?" view
-      experience: [
-        { period: 'Desde maio de 2025', role: 'D2C Team Lead | Line Manager', company: 'Nestlé',
-          description: 'Lidero a equipa de operações globais dos websites Nescafé Dolce Gusto.' },
-        { period: '2024–2025', role: 'D2C Technical Coordinator', company: 'Nestlé',
-          description: 'Coordenação técnica dos websites da Zona Europa.' },
-        { period: '2021–2024', role: 'Front-end Developer', company: 'McFadyen Digital', description: '' }
-      ],
       projects: [
         { id: 'ndg', title: 'Nescafé Dolce Gusto', summary: 'Operação global dos websites',
           description: 'Lidero a operação global dos websites Nescafé Dolce Gusto, com uma equipa de webmasters, gestão de projeto (PM) e garantia de qualidade (QA).',
@@ -395,19 +426,36 @@
       ],
       skills: ['HTML', 'CSS', 'JavaScript', 'TypeScript', 'React', 'Vue.js', 'Magento 2', 'Git', 'Gestão de projetos', 'Gestão de equipas'],
 
-      // "Hobbies" view
+      // "Hobbies" view. "icon" = list of SVG strokes (the d attribute of each <path>), drawn on a 24x24 grid
       hobbies: [
         { id: 'music', title: 'Música', summary: 'Guitarra e DJ',
           description: 'Toco guitarra e também passo música como DJ.',
-          tags: ['Guitarra', 'DJ'] },
+          tags: ['Guitarra', 'DJ'],
+          icon: [ // music notes
+            'M9 18V5l12-2v13',
+            'M3 18a3 3 0 1 0 6 0a3 3 0 1 0-6 0',
+            'M15 16a3 3 0 1 0 6 0a3 3 0 1 0-6 0'
+          ] },
         { id: 'games', title: 'Games', summary: 'PS5, emuladores retro e PC',
           description: 'Jogo na PS5 e no PC, e gosto de revisitar jogos clássicos em emuladores retro.',
-          tags: ['PS5', 'Emuladores retro', 'PC'] },
+          tags: ['PS5', 'Emuladores retro', 'PC'],
+          icon: [ // game controller
+            'M6 11h4', 'M8 9v4', 'M15 12h.01', 'M18 10h.01',
+            'M17.32 5H6.68a4 4 0 0 0-3.978 3.59c-.006.052-.01.101-.017.152C2.604 9.416 2 14.456 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.414-1.414A2 2 0 0 1 9.828 16h4.344a2 2 0 0 1 1.414.586L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.545-.604-6.584-.685-7.258-.007-.05-.011-.1-.017-.151A4 4 0 0 0 17.32 5z'
+          ] },
         { id: 'stories', title: 'Filmes, séries e livros', summary: 'Boas histórias, em qualquer formato',
           description: 'Gosto de boas histórias, seja num filme, numa série ou num livro.',
-          tags: ['Filmes', 'Séries', 'Livros'] },
+          tags: ['Filmes', 'Séries', 'Livros'],
+          icon: [ // popcorn bucket
+            'M18 8a2 2 0 0 0 0-4 2 2 0 0 0-4 0 2 2 0 0 0-4 0 2 2 0 0 0-4 0 2 2 0 0 0 0 4',
+            'M10 22 9 8', 'M14 22l1-14',
+            'M20 8c.5 0 .9.4.8 1l-2.6 12c-.1.5-.7 1-1.2 1H7c-.6 0-1.1-.4-1.2-1L3.2 9c-.1-.6.3-1 .8-1Z'
+          ] },
         { id: 'travel', title: 'Viagens', summary: 'Conhecer lugares novos',
-          description: 'Gosto de viajar e de conhecer lugares e culturas diferentes.' }
+          description: 'Gosto de viajar e de conhecer lugares e culturas diferentes.',
+          icon: [ // aeroplane
+            'M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z'
+          ] }
       ],
 
       // Footer: online identity. "icon" is the SVG drawing (the d attribute of a <path>)
