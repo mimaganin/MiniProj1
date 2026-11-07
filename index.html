@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Milena Maganin · Currículo</title>
+  <meta name="description" content="Currículo de Milena Maganin, Analista de Sistemas e Team Lead.">
+
+  <!-- Vue 3 from a CDN, pinned version (global build: exposes the "Vue" object on window) -->
+  <script src="https://unpkg.com/vue@3.4.38/dist/vue.global.prod.js"></script>
+
+  <style>
+    /* ===== 1. Design tokens: a single accent colour, system font stack ===== */
+    :root {
+      --accent: #0f6e6a;
+      --accent-soft: #e6f2f1;
+      --text: #1f2328;
+      --text-muted: #57606a;
+      --bg: #ffffff;
+      --bg-alt: #f6f8fa;
+      --border: #d8dee4;
+      --radius: 10px;
+      --max-width: 960px;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+
+    /* ===== 2. Base (mobile first: these styles target small screens) ===== */
+    *, *::before, *::after { box-sizing: border-box; }
+    body { margin: 0; color: var(--text); background: var(--bg-alt); line-height: 1.6; }
+    h1, h2, h3 { line-height: 1.25; }
+    a { color: var(--accent); }
+
+    /* Hide the raw template ({{ ... }}) until Vue has mounted it */
+    [v-cloak] { display: none; }
+
+    /* Page layout: header, content and footer in a column; the footer always sits at the bottom */
+    .app { min-height: 100vh; display: flex; flex-direction: column; }
+    .container { width: 100%; max-width: var(--max-width); margin: 0 auto; padding: 0 16px; }
+
+    /* ===== 3. Header and navigation ===== */
+    .site-header {
+      position: sticky; top: 0; z-index: 10;
+      background: var(--bg); border-bottom: 1px solid var(--border);
+    }
+    .site-header .container { display: flex; flex-direction: column; gap: 8px; padding-top: 12px; padding-bottom: 10px; }
+    .brand { margin: 0; font-size: 1.25rem; }
+    .brand small { display: block; font-size: .875rem; font-weight: 400; color: var(--text-muted); }
+
+    .main-nav ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 4px; }
+    .main-nav a {
+      display: block; padding: 8px 12px; border-radius: 999px;
+      color: var(--text); text-decoration: none; font-weight: 500; white-space: nowrap;
+    }
+    .main-nav a:hover { background: var(--bg-alt); }
+
+    /* ===== 4. Main content ===== */
+    .content { flex: 1; padding: 24px 0 40px; }
+    .panel {
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 20px; margin-top: 20px;
+    }
+    .panel h3 { margin: 0 0 12px; font-size: 1.125rem; }
+    /* ===== 5. Footer with social links ===== */
+    .site-footer { background: var(--bg); border-top: 1px solid var(--border); }
+    .site-footer .container {
+      display: flex; flex-direction: column; align-items: center; gap: 10px;
+      padding-top: 20px; padding-bottom: 20px; text-align: center;
+    }
+    .social-links { list-style: none; margin: 0; padding: 0; display: flex; gap: 12px; }
+    .social-links a {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 44px; height: 44px; border-radius: 50%;
+      color: var(--text); border: 1px solid var(--border);
+    }
+    .social-links a:hover { color: var(--accent); border-color: var(--accent); }
+    .social-links svg { width: 20px; height: 20px; }
+    .site-footer p { margin: 0; font-size: .875rem; color: var(--text-muted); }
+
+  </style>
+</head>
+<body>
+  <noscript><p>Este site precisa de JavaScript ativo para funcionar.</p></noscript>
+
+  <!-- App root: everything inside #app is a template controlled by Vue -->
+  <div id="app" class="app" v-cloak>
+    <!-- HEADER: fixed, the same on every view -->
+    <header class="site-header">
+      <div class="container">
+        <h1 class="brand">{{ cv.name }} <small>{{ cv.role }}</small></h1>
+
+        <!-- Menu generated from the "views" list (v-for) -->
+        <nav class="main-nav" aria-label="Secções do currículo">
+          <ul>
+            <li v-for="view in views" :key="view.id">
+              <a :href="'#/' + view.id">{{ view.title }}</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <!-- CONTENT: the area that switches between the three views -->
+    <main id="content" class="content">
+      <div class="container">
+        <p>Conteúdo das vistas (próxima etapa).</p>
+      </div>
+    </main>
+
+    <!-- FOOTER: fixed, shows the online identity (inline SVG icons) -->
+    <footer class="site-footer">
+      <div class="container">
+        <ul class="social-links">
+          <li v-for="link in cv.social" :key="link.name">
+            <a :href="link.url"
+               :target="link.external ? '_blank' : null"
+               :rel="link.external ? 'noopener noreferrer' : null"
+               :aria-label="link.external ? link.name + ' (abre numa nova janela)' : link.name">
+              <!-- Fixed viewBox (24x24) for every icon; the icon is decorative, the name goes in aria-label -->
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"
+                   :fill="link.outline ? 'none' : 'currentColor'"
+                   :stroke="link.outline ? 'currentColor' : 'none'"
+                   stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path :d="link.icon"></path>
+              </svg>
+            </a>
+          </li>
+        </ul>
+        <p>© 2026 {{ cv.name }} · Miniprojeto 1, Programação Web Avançada (MEIW, UAb/UTAD)</p>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    /* =====================================================================
+       1. CV DATA
+       All the content lives here, in a single object. The HTML above only
+       says WHERE and HOW to show it; Vue fills it in from this data.
+       ===================================================================== */
+    const cv = {
+      name: 'Milena Maganin',
+      role: 'Analista de Sistemas e Team Lead',
+
+      // "Quem Sou Eu?" view: intro, education and earlier career
+      about: {
+        summary: 'Profissional brasileira a viver em Lisboa, com 15 anos de experiência em Comunicação e quase 10 anos a atuar na área de Tecnologia.',
+        education: [
+          { period: '2006–2009', course: 'Licenciatura em Comunicação Social – Jornalismo', institution: 'Unaerp' },
+          { period: '2012–2014', course: 'Pós-graduação em Linguagens dos Media', institution: 'Centro Universitário Barão de Mauá' },
+          { period: '2023–2024', course: 'CS50x – Introduction to Computer Science', institution: 'Harvard' },
+          { period: '2023–2025', course: 'Tecnólogo em Análise e Desenvolvimento de Sistemas', institution: 'Universidade Católica de Brasília' },
+          { period: '2026 – em curso', course: 'Mestrado em Engenharia Informática e Tecnologia Web', institution: 'UAb/UTAD' }
+        ],
+        beforeTech: [
+          'Assessoria de imprensa',
+          'Comunicação interna (Pearson Brasil)',
+          'Marketing digital',
+          'Cofundadora e produtora executiva da L4 Filmes',
+          'Docente de Comunicação e Informática no Senac São Paulo'
+        ]
+      },
+
+      // "O que faço?" view
+      experience: [
+        { period: 'Desde maio de 2025', role: 'D2C Team Lead | Line Manager', company: 'Nestlé',
+          description: 'Lidero a equipa de operações globais dos websites Nescafé Dolce Gusto.' },
+        { period: '2024–2025', role: 'D2C Technical Coordinator', company: 'Nestlé',
+          description: 'Coordenação técnica dos websites da Zona Europa.' },
+        { period: '2021–2024', role: 'Front-end Developer', company: 'McFadyen Digital', description: '' }
+      ],
+      projects: [
+        { id: 'ndg', title: 'Nescafé Dolce Gusto', summary: 'Operação global dos websites',
+          description: 'Lidero a operação global dos websites Nescafé Dolce Gusto, com uma equipa de webmasters, gestão de projeto (PM) e garantia de qualidade (QA).',
+          tags: ['Liderança de equipas', 'Operações web', 'Gestão de projetos'] },
+        { id: 'fedex', title: 'FedEx – Print on Demand', summary: 'Marketplace em Magento 2',
+          description: 'Desenvolvimento de funcionalidades do marketplace Print on Demand em Magento 2.',
+          tags: ['Magento 2', 'HTML', 'CSS', 'JavaScript', 'TypeScript', 'PHP', 'Docker'] },
+        { id: 'hearst', title: 'Hearst – ShopBazaar', summary: 'Componentes React com Magento PWA Studio',
+          description: 'Desenvolvimento de componentes React com Magento PWA Studio, integrados com o CMS Contentful através de GraphQL.',
+          tags: ['React', 'Magento PWA Studio', 'Contentful', 'GraphQL'] },
+        { id: 'l4', title: 'L4 Filmes', summary: 'Produção executiva audiovisual',
+          description: 'Como cofundadora e produtora executiva da L4 Filmes, fui responsável pela produção executiva de projetos audiovisuais.',
+          tags: ['Produção executiva', 'Audiovisual'] }
+      ],
+      skills: ['HTML', 'CSS', 'JavaScript', 'TypeScript', 'React', 'Vue.js', 'Magento 2', 'Git', 'Gestão de projetos', 'Gestão de equipas'],
+
+      // "Hobbies" view
+      hobbies: [
+        { id: 'music', title: 'Música', summary: 'Guitarra e DJ',
+          description: 'Toco guitarra e também passo música como DJ.',
+          tags: ['Guitarra', 'DJ'] },
+        { id: 'games', title: 'Games', summary: 'PS5, emuladores retro e PC',
+          description: 'Jogo na PS5 e no PC, e gosto de revisitar jogos clássicos em emuladores retro.',
+          tags: ['PS5', 'Emuladores retro', 'PC'] },
+        { id: 'stories', title: 'Filmes, séries e livros', summary: 'Boas histórias, em qualquer formato',
+          description: 'Gosto de boas histórias, seja num filme, numa série ou num livro.',
+          tags: ['Filmes', 'Séries', 'Livros'] },
+        { id: 'travel', title: 'Viagens', summary: 'Conhecer lugares novos',
+          description: 'Gosto de viajar e de conhecer lugares e culturas diferentes.' }
+      ],
+
+      // Footer: online identity. "icon" is the SVG drawing (the d attribute of a <path>)
+      social: [
+        { name: 'LinkedIn', url: 'https://www.linkedin.com/in/milenamaganin/', external: true, outline: false,
+          icon: 'M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z' },
+        { name: 'GitHub', url: 'https://github.com/mimaganin', external: true, outline: false,
+          icon: 'M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12' },
+        { name: 'E-mail', url: 'mailto:mimaganin@gmail.com', external: false, outline: true,
+          icon: 'M4 5h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2zM2.5 7.5 12 13.5l9.5-6' }
+      ]
+    };
+
+    /* The three SPA views: "id" is what shows in the URL (#/id) and "title" is the menu text */
+    const views = [
+      { id: 'quem-sou-eu', title: 'Quem Sou Eu?' },
+      { id: 'o-que-faco', title: 'O que faço?' },
+      { id: 'hobbies', title: 'Hobbies' }
+    ];
+
+    /* =====================================================================
+       2. VUE APP
+       createApp() creates the app; setup() returns everything the template uses.
+       ===================================================================== */
+    const { createApp } = Vue;
+
+    createApp({
+      setup() {
+        return { cv, views };
+      }
+    }).mount('#app'); // binds the app to <div id="app">
+  </script>
+</body>
+</html>
