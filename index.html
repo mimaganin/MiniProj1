@@ -67,7 +67,7 @@
     .view-title { margin: 0; font-size: 1.75rem; }
     .hint { margin: 4px 0 0; color: var(--text-muted); font-size: .9375rem; }
 
-    /* Intro block ("Quem Sou Eu?") */
+    /* Intro block ("Quem Sou Eu") */
     .intro { border-left: 4px solid var(--accent); }
     .intro p { margin: 0; }
     .intro-name { font-size: 1.375rem; font-weight: 700; }
@@ -213,7 +213,7 @@
     <!-- HEADER: fixed, the same on every view -->
     <header class="site-header">
       <div class="container">
-        <!-- The name is a link back to the default view ("Quem Sou Eu?") -->
+        <!-- The name is a link back to the default view ("Quem Sou Eu") -->
         <h1 class="brand">
           <a :href="'#/' + defaultView" @click="onBrandClick">{{ cv.name }} <small>{{ cv.role }}</small></a>
         </h1>
@@ -238,7 +238,7 @@
         <!-- Current view title (a computed value: it updates by itself when the view changes) -->
         <h2 id="view-title" ref="viewTitle" class="view-title" tabindex="-1">{{ currentTitle }}</h2>
 
-        <!-- VIEW 1: Quem Sou Eu? (v-if: only exists in the DOM while it is the current view) -->
+        <!-- VIEW 1: Quem Sou Eu (v-if: only exists in the DOM while it is the current view) -->
         <section v-if="currentView === 'quem-sou-eu'" class="view" aria-labelledby="view-title">
           <div class="panel intro">
             <p class="intro-name">{{ cv.name }}</p>
@@ -277,7 +277,7 @@
           </div>
         </section>
 
-        <!-- VIEW 2: O que faço? (projects + skills) -->
+        <!-- VIEW 2: O que faço (projects + skills) -->
         <section v-else-if="currentView === 'o-que-faco'" class="view" aria-labelledby="view-title">
           <div class="panel">
             <h3>Projetos</h3>
@@ -388,7 +388,7 @@
       name: 'Milena Maganin',
       role: 'Analista de Sistemas e Team Lead',
 
-      // "Quem Sou Eu?" view: intro, education, experience and earlier career
+      // "Quem Sou Eu" view: intro, education, experience and earlier career
       about: {
         summary: 'Profissional brasileira a viver em Lisboa, com 15 anos de experiência em Comunicação e quase 10 anos a atuar na área de Tecnologia.',
         education: [
@@ -414,7 +414,7 @@
         ]
       },
 
-      // "O que faço?" view
+      // "O que faço" view
       projects: [
         { id: 'ndg', title: 'Nescafé Dolce Gusto', summary: 'Operação global dos websites',
           description: 'Lidero a operação global dos websites Nescafé Dolce Gusto, com uma equipa de webmasters, gestão de projeto (PM) e garantia de qualidade (QA).',
@@ -476,8 +476,8 @@
 
     /* The three SPA views: "id" is what shows in the URL (#/id) and "title" is the menu text */
     const views = [
-      { id: 'quem-sou-eu', title: 'Quem Sou Eu?' },
-      { id: 'o-que-faco', title: 'O que faço?' },
+      { id: 'quem-sou-eu', title: 'Quem Sou Eu' },
+      { id: 'o-que-faco', title: 'O que faço' },
       { id: 'hobbies', title: 'Hobbies' }
     ];
     const DEFAULT_VIEW = 'quem-sou-eu';

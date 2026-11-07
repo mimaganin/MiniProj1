@@ -7,7 +7,7 @@
 
 ## Objetivo
 
-Site-currículo numa única página (`index.html`), desenvolvido como SPA com Vue.js, com três vistas: **"Quem Sou Eu?"**, **"O que faço?"** e **"Hobbies"**. A navegação entre vistas e a abertura de janelas modais fazem-se sem recarregar a página. O rodapé, presente em todas as vistas, mostra a identidade virtual com ícones de redes sociais.
+Site-currículo numa única página (`index.html`), desenvolvido como SPA com Vue.js, com três vistas: **"Quem Sou Eu"**, **"O que faço"** e **"Hobbies"**. A navegação entre vistas e a abertura de janelas modais fazem-se sem recarregar a página. O rodapé, presente em todas as vistas, mostra a identidade virtual com ícones de redes sociais.
 
 ## Como correr
 
@@ -109,8 +109,8 @@ Todo o **código** está em inglês: classes e variáveis CSS, ids, comentários
 Em `docs/wireframes.pdf` (fonte: `docs/wireframes.html`), em 5 páginas:
 
 1. Mapa de navegação e tabela de distribuição dos dados pelas vistas.
-2. "Quem Sou Eu?" (apresentação, percurso académico, experiência profissional, antes da tecnologia): desktop e telemóvel.
-3. "O que faço?" (projetos e competências): desktop e telemóvel.
+2. "Quem Sou Eu" (apresentação, percurso académico, experiência profissional, antes da tecnologia): desktop e telemóvel.
+3. "O que faço" (projetos e competências): desktop e telemóvel.
 4. "Hobbies" (cartões com ícone): desktop e telemóvel.
 5. Modal: desktop (projeto) e telemóvel (hobby).
 

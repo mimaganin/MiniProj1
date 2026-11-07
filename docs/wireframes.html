@@ -129,11 +129,11 @@
     <div>
       <p class="label">Mapa de navegação (um só documento: index.html)</p>
       <div class="map">
-        <div class="fixed">CABEÇALHO FIXO: nome (link para Quem Sou Eu?), cargo e menu com 3 links internos <span class="marker">1</span></div>
+        <div class="fixed">CABEÇALHO FIXO: nome (link para Quem Sou Eu), cargo e menu com 3 links internos <span class="marker">1</span></div>
         <div class="arrow">o link clicado muda só o fragmento da URL (#/…) → evento <b>hashchange</b> → o Vue troca a vista</div>
         <div class="views">
-          <div class="view"><b>Quem Sou Eu?</b><code>#/quem-sou-eu</code><code>(vista por omissão)</code></div>
-          <div class="view"><b>O que faço?</b><code>#/o-que-faco</code></div>
+          <div class="view"><b>Quem Sou Eu</b><code>#/quem-sou-eu</code><code>(vista por omissão)</code></div>
+          <div class="view"><b>O que faço</b><code>#/o-que-faco</code></div>
           <div class="view"><b>Hobbies</b><code>#/hobbies</code></div>
         </div>
         <div class="views">
@@ -159,21 +159,21 @@
       <table>
         <thead><tr><th>Dados (objeto <code>cv</code>)</th><th>Onde aparecem</th><th>Como são mostrados</th></tr></thead>
         <tbody>
-          <tr><td><code>cv.name</code>, <code>cv.role</code></td><td>Cabeçalho (todas) e topo de "Quem Sou Eu?"</td><td>Texto</td></tr>
+          <tr><td><code>cv.name</code>, <code>cv.role</code></td><td>Cabeçalho (todas) e topo de "Quem Sou Eu"</td><td>Texto</td></tr>
           <tr><td><code>views[]</code> (3)</td><td>Menu do cabeçalho; título h2 da vista</td><td>Links <code>v-for</code></td></tr>
-          <tr><td><code>cv.about.summary</code></td><td>Quem Sou Eu?</td><td>Bloco de apresentação</td></tr>
-          <tr><td><code>cv.about.education[]</code> (5)</td><td>Quem Sou Eu?</td><td>Cronologia: período, curso, instituição</td></tr>
-          <tr><td><code>cv.about.experience[]</code> (3)</td><td>Quem Sou Eu?</td><td>Cronologia: período, cargo, empresa, descrição</td></tr>
-          <tr><td><code>cv.about.beforeTech[]</code> (5)</td><td>Quem Sou Eu?</td><td>Lista simples</td></tr>
-          <tr><td><code>cv.projects[]</code> (4)</td><td>O que faço?</td><td>Cartões (título + resumo) → modal com descrição e tecnologias</td></tr>
-          <tr><td><code>cv.skills[]</code> (10)</td><td>O que faço?</td><td>Etiquetas</td></tr>
+          <tr><td><code>cv.about.summary</code></td><td>Quem Sou Eu</td><td>Bloco de apresentação</td></tr>
+          <tr><td><code>cv.about.education[]</code> (5)</td><td>Quem Sou Eu</td><td>Cronologia: período, curso, instituição</td></tr>
+          <tr><td><code>cv.about.experience[]</code> (3)</td><td>Quem Sou Eu</td><td>Cronologia: período, cargo, empresa, descrição</td></tr>
+          <tr><td><code>cv.about.beforeTech[]</code> (5)</td><td>Quem Sou Eu</td><td>Lista simples</td></tr>
+          <tr><td><code>cv.projects[]</code> (4)</td><td>O que faço</td><td>Cartões (título + resumo) → modal com descrição e tecnologias</td></tr>
+          <tr><td><code>cv.skills[]</code> (10)</td><td>O que faço</td><td>Etiquetas</td></tr>
           <tr><td><code>cv.hobbies[]</code> (4)</td><td>Hobbies</td><td>Cartões com ícone → modal com ícone, descrição e etiquetas</td></tr>
           <tr><td><code>cv.social[]</code> (3)</td><td>Rodapé (todas)</td><td>Ícones SVG com link</td></tr>
         </tbody>
       </table>
       <div class="notes">
         <ol style="margin-top:4mm">
-          <li><span class="marker">1</span><span><b>Cabeçalho fixo</b> (sticky): não é recriado ao mudar de vista. Clicar no nome leva sempre a "Quem Sou Eu?" (<code>#/quem-sou-eu</code>). No desktop, nome à esquerda e menu à direita; no telemóvel, o menu passa para baixo do nome (sem hambúrguer, são só 3 links).</span></li>
+          <li><span class="marker">1</span><span><b>Cabeçalho fixo</b> (sticky): não é recriado ao mudar de vista. Clicar no nome leva sempre a "Quem Sou Eu" (<code>#/quem-sou-eu</code>). No desktop, nome à esquerda e menu à direita; no telemóvel, o menu passa para baixo do nome (sem hambúrguer, são só 3 links).</span></li>
           <li><span class="marker">2</span><span><b>Modal</b>: uma só estrutura HTML; muda apenas o conteúdo. Desktop: caixa centrada. Telemóvel: "folha" que sobe do fundo do ecrã.</span></li>
           <li><span class="marker">3</span><span><b>Rodapé fixo</b>: igual em todas as vistas; LinkedIn e GitHub abrem num novo separador, o e-mail abre o cliente de correio.</span></li>
         </ol>
@@ -182,9 +182,9 @@
   </div>
 </section>
 
-<!-- ============ PAGE 2: Quem Sou Eu? ============ -->
+<!-- ============ PAGE 2: Quem Sou Eu ============ -->
 <section class="sheet">
-  <div class="sheet-header"><h1>Vista 1: "Quem Sou Eu?"</h1><span>#/quem-sou-eu · vista por omissão (abrir o index.html sem hash leva aqui)</span></div>
+  <div class="sheet-header"><h1>Vista 1: "Quem Sou Eu"</h1><span>#/quem-sou-eu · vista por omissão (abrir o index.html sem hash leva aqui)</span></div>
   <div class="stage">
     <div>
       <p class="label">Desktop (≥ 760 px)</p>
@@ -192,10 +192,10 @@
         <div class="browser-bar"><i></i><i></i><i></i><b>index.html#/quem-sou-eu</b></div>
         <div class="wf-header">
           <div class="brand">Milena Maganin <small>Analista de Sistemas e Team Lead</small></div>
-          <div class="nav"><span class="active">Quem Sou Eu?</span><span>O que faço?</span><span>Hobbies</span> <span class="marker">1</span></div>
+          <div class="nav"><span class="active">Quem Sou Eu</span><span>O que faço</span><span>Hobbies</span> <span class="marker">1</span></div>
         </div>
         <div class="wf-main">
-          <div class="view-title">Quem Sou Eu? <span class="marker">2</span></div>
+          <div class="view-title">Quem Sou Eu <span class="marker">2</span></div>
           <div class="panel intro">
             <b>Milena Maganin</b> · Analista de Sistemas e Team Lead <span class="marker">3</span>
             <div class="text-line" style="width:95%"></div><div class="text-line" style="width:60%"></div>
@@ -232,10 +232,10 @@
         <div class="browser-bar"><b>#/quem-sou-eu</b></div>
         <div class="wf-header">
           <div class="brand">Milena Maganin <small>Analista de Sistemas e Team Lead</small></div>
-          <div class="nav"><span class="active">Quem Sou Eu?</span><span>O que faço?</span><span>Hobbies</span></div>
+          <div class="nav"><span class="active">Quem Sou Eu</span><span>O que faço</span><span>Hobbies</span></div>
         </div>
         <div class="wf-main">
-          <div class="view-title">Quem Sou Eu?</div>
+          <div class="view-title">Quem Sou Eu</div>
           <div class="panel intro"><b>Milena Maganin</b><div class="text-line"></div><div class="text-line" style="width:70%"></div></div>
           <div class="panel"><div class="panel-title">Percurso académico</div>
             <div class="item"><div class="period">2006–2009</div><div class="text-line"></div></div>
@@ -270,9 +270,9 @@
   </div>
 </section>
 
-<!-- ============ PAGE 3: O que faço? ============ -->
+<!-- ============ PAGE 3: O que faço ============ -->
 <section class="sheet">
-  <div class="sheet-header"><h1>Vista 2: "O que faço?"</h1><span>#/o-que-faco</span></div>
+  <div class="sheet-header"><h1>Vista 2: "O que faço"</h1><span>#/o-que-faco</span></div>
   <div class="stage">
     <div>
       <p class="label">Desktop (≥ 760 px)</p>
@@ -280,10 +280,10 @@
         <div class="browser-bar"><i></i><i></i><i></i><b>index.html#/o-que-faco</b></div>
         <div class="wf-header">
           <div class="brand">Milena Maganin <small>Analista de Sistemas e Team Lead</small></div>
-          <div class="nav"><span>Quem Sou Eu?</span><span class="active">O que faço?</span><span>Hobbies</span></div>
+          <div class="nav"><span>Quem Sou Eu</span><span class="active">O que faço</span><span>Hobbies</span></div>
         </div>
         <div class="wf-main">
-          <div class="view-title">O que faço?</div>
+          <div class="view-title">O que faço</div>
           <div class="panel">
             <div class="panel-title">Projetos <span class="marker">1</span></div>
             <div class="hint">Selecione um projeto para ver o detalhe.</div>
@@ -310,10 +310,10 @@
         <div class="browser-bar"><b>#/o-que-faco</b></div>
         <div class="wf-header">
           <div class="brand">Milena Maganin <small>Analista de Sistemas e Team Lead</small></div>
-          <div class="nav"><span>Quem Sou Eu?</span><span class="active">O que faço?</span><span>Hobbies</span></div>
+          <div class="nav"><span>Quem Sou Eu</span><span class="active">O que faço</span><span>Hobbies</span></div>
         </div>
         <div class="wf-main">
-          <div class="view-title">O que faço?</div>
+          <div class="view-title">O que faço</div>
           <div class="panel"><div class="panel-title">Projetos</div>
             <div class="card-grid">
               <div class="card"><b>Nescafé Dolce Gusto</b><u>Ver detalhe →</u></div>
@@ -348,7 +348,7 @@
         <div class="browser-bar"><i></i><i></i><i></i><b>index.html#/hobbies</b></div>
         <div class="wf-header">
           <div class="brand">Milena Maganin <small>Analista de Sistemas e Team Lead</small></div>
-          <div class="nav"><span>Quem Sou Eu?</span><span>O que faço?</span><span class="active">Hobbies</span></div>
+          <div class="nav"><span>Quem Sou Eu</span><span>O que faço</span><span class="active">Hobbies</span></div>
         </div>
         <div class="wf-main" style="min-height:62mm">
           <div class="view-title">Hobbies</div>
@@ -370,7 +370,7 @@
         <div class="browser-bar"><b>#/hobbies</b></div>
         <div class="wf-header">
           <div class="brand">Milena Maganin <small>Analista de Sistemas e Team Lead</small></div>
-          <div class="nav"><span>Quem Sou Eu?</span><span>O que faço?</span><span class="active">Hobbies</span></div>
+          <div class="nav"><span>Quem Sou Eu</span><span>O que faço</span><span class="active">Hobbies</span></div>
         </div>
         <div class="wf-main">
           <div class="view-title">Hobbies</div>
@@ -405,9 +405,9 @@
         <div class="browser-bar"><i></i><i></i><i></i><b>index.html#/o-que-faco</b> (a URL não muda)</div>
         <div class="wf-header">
           <div class="brand">Milena Maganin <small>Analista de Sistemas e Team Lead</small></div>
-          <div class="nav"><span>Quem Sou Eu?</span><span class="active">O que faço?</span><span>Hobbies</span></div>
+          <div class="nav"><span>Quem Sou Eu</span><span class="active">O que faço</span><span>Hobbies</span></div>
         </div>
-        <div class="wf-main"><div class="view-title">O que faço?</div><div class="panel"><div class="card-grid"><div class="card">&nbsp;</div><div class="card">&nbsp;</div><div class="card">&nbsp;</div><div class="card">&nbsp;</div></div></div><div class="panel"><div class="text-line"></div></div></div>
+        <div class="wf-main"><div class="view-title">O que faço</div><div class="panel"><div class="card-grid"><div class="card">&nbsp;</div><div class="card">&nbsp;</div><div class="card">&nbsp;</div><div class="card">&nbsp;</div></div></div><div class="panel"><div class="text-line"></div></div></div>
         <div class="overlay"></div>
         <div class="wf-modal" style="left:28mm; right:28mm; top:30mm;">
           <div class="close">×</div>
@@ -428,7 +428,7 @@
         <div class="browser-bar"><b>#/hobbies</b></div>
         <div class="wf-header">
           <div class="brand">Milena Maganin</div>
-          <div class="nav"><span>Quem Sou Eu?</span><span>O que faço?</span><span class="active">Hobbies</span></div>
+          <div class="nav"><span>Quem Sou Eu</span><span>O que faço</span><span class="active">Hobbies</span></div>
         </div>
         <div class="wf-main"><div class="card">&nbsp;</div><div class="card">&nbsp;</div></div>
         <div class="overlay"></div>
